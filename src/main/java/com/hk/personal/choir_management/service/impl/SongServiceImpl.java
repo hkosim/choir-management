@@ -1,0 +1,22 @@
+package com.hk.personal.choir_management.service.impl;
+
+import com.hk.personal.choir_management.entity.Song;
+import com.hk.personal.choir_management.repository.SongRepository;
+import com.hk.personal.choir_management.service.SongService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+@Service
+public class SongServiceImpl implements SongService {
+    private final SongRepository songRepository;
+
+    public SongServiceImpl(SongRepository songRepository) {
+        this.songRepository = songRepository;
+    }
+
+    @Override
+    public Page<Song> findAll(Pageable pageable) {
+        return songRepository.findAll(pageable);
+    }
+}
