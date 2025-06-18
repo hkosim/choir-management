@@ -161,7 +161,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         Member member = memberRepository.findById(username)
                 .orElseThrow(() -> new EntityNotFoundException("Member not found: " + username));
 
-        if ("REHEARSAL".equalsIgnoreCase(type)) {
+        if ("rehearsal".equalsIgnoreCase(type)) {
             Rehearsal rehearsal = rehearsalRepository.findById(id)
                     .orElseThrow(() -> new EntityNotFoundException("Rehearsal not found: " + id));
 
@@ -186,7 +186,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                     rehearsal.getLocation(),
                     present
             );
-        } else if ("PERFORMANCE".equalsIgnoreCase(type)) {
+        } else if ("performance".equalsIgnoreCase(type)) {
             Performance performance = performanceRepository.findById(id)
                     .orElseThrow(() -> new EntityNotFoundException("Performance not found: " + id));
 
@@ -216,7 +216,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     /**
-     * Save updated rehearsal object.
+     * Save updated rehearsal.
      *
      * @param rehearsal updated object.
      * @return the updated rehearsal.

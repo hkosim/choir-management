@@ -70,10 +70,10 @@ public class ChoirManagementBusinessServiceImpl implements ChoirManagementBusine
     }
 
     @Override
-    public MemberProfileResponse getMemberProfile(String username) {
+    public MemberProfileDto getMemberProfile(String username) {
         Member member = memberService.findByUsername(username);
 
-        return new MemberProfileResponse(
+        return new MemberProfileDto(
                 member.getUsername(),
                 member.getName(),
                 member.getEmail(),

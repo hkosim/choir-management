@@ -30,7 +30,6 @@ public class AttendanceServiceImpl implements AttendanceService {
     /**
      * Returns all appointments with attendance status for a given user.
      *
-//     * @param username the user's username
      * @return the attendances of the members
      */
     @Override

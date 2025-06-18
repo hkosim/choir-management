@@ -40,7 +40,7 @@ public class AppointmentController {
     }
 
     /**
-     * Returns an appointment.
+     * Returns an appointment given a type and id of the appointment.
      *
      * @param type the type of appointment.
      * @param id   the id of rehearsal or performance

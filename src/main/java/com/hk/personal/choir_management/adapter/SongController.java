@@ -22,7 +22,12 @@ public class SongController {
         this.choirManagementBusinessService = choirManagementBusinessService;
     }
 
-    // GET ALL SONGS
+    /**
+     * Returns all the songs with pagination,
+     *
+     * @param pageable page configurations for the pageable.
+     * @return all songs with pagination.
+     */
     @GetMapping(value = "")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("isAuthenticated()")

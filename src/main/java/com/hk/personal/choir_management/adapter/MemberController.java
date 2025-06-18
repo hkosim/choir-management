@@ -22,10 +22,14 @@ public class MemberController {
         this.choirManagementBusinessService = choirManagementBusinessService;
     }
 
-    // REGISTER A MEMBER
+    /**
+     * Performs registration.
+     *
+     * @param registerRequest contains the data needed for registration.
+     * @return response of the registration.
+     */
     @PostMapping(value = "/register")
     @ResponseStatus(HttpStatus.CREATED)
-//    @PreAuthorize("hasRole('ADMIN')")
     public RegisterResponse register(
             @RequestBody RegisterRequest registerRequest
     ) {
@@ -49,8 +53,8 @@ public class MemberController {
     /**
      * Get roles
      *
-     * @param username the login credentials.
-     * @return the authentication result.
+     * @param username username from a Member.
+     * @return the roles of the user.
      */
     @GetMapping(value = "/roles/{username}")
     @ResponseStatus(HttpStatus.OK)
@@ -61,17 +65,26 @@ public class MemberController {
         return choirManagementBusinessService.getRoles(username);
     }
 
-    // Get User Result By Id
+    /**
+     * Returns a User given username or ID
+     *
+     * @param username as the ID of Member.
+     * @return Profile of the Member.
+     */
     @GetMapping(value = "/profile/{username}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("isAuthenticated()")
-    public MemberProfileResponse getUserResultById(
+    public MemberProfileDto getUserResultById(
             @PathVariable String username
     ) {
         return choirManagementBusinessService.getMemberProfile(username);
     }
 
-    // GET ALL MEMBERS
+    /**
+     * Returns all the Members
+     *
+     * @return all Members.
+     */
     @GetMapping(value = "")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ADMIN')")

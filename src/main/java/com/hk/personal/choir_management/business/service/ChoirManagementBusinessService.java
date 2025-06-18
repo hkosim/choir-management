@@ -19,7 +19,7 @@ public interface ChoirManagementBusinessService {
     RegisterResponse register(RegisterRequest registerRequest);
     LoginResponse login(LoginRequest loginRequest);
     List<String> getRoles(String username);
-    MemberProfileResponse getMemberProfile(String username);
+    MemberProfileDto getMemberProfile(String username);
 
     Page<Member> getAllMembers(Pageable pageable);
     List<MemberAttendanceDto> getAllAttendances();

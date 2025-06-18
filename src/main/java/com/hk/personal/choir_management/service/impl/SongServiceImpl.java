@@ -15,6 +15,13 @@ public class SongServiceImpl implements SongService {
         this.songRepository = songRepository;
     }
 
+
+    /**
+     * Returns all paged songs.
+     *
+     * @param pageable the requested pagination configuration.
+     * @return the songs with pagination.
+     */
     @Override
     public Page<Song> findAll(Pageable pageable) {
         return songRepository.findAll(pageable);

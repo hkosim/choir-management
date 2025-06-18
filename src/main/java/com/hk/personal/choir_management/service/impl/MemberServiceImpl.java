@@ -29,17 +29,35 @@ public class MemberServiceImpl implements MemberService {
         this.passwordEncoder = passwordEncoder;
     }
 
-
+    /**
+     * Returns all paged members.
+     *
+     * @param pageable the requested pagination configuration.
+     * @return the members with pagination.
+     */
     @Override
     public Page<Member> findAll(Pageable pageable) {
         return this.memberRepository.findAll(pageable);
     }
 
+
+    /**
+     * Returns all members.
+     *
+     * @return all of the members.
+     */
     @Override
     public List<Member> findAll() {
         return this.memberRepository.findAll();
     }
 
+
+    /**
+     * Returns a member by username.
+     *
+     * @param username of the member.
+     * @return the member with given username.
+     */
     @Override
     public Member findByUsername(String username) {
         Optional<Member> _member = memberRepository.findById(username);
@@ -49,6 +67,13 @@ public class MemberServiceImpl implements MemberService {
         throw new RuntimeException();
     }
 
+
+    /**
+     * Returns roles of a member.
+     *
+     * @param username of the member.
+     * @return the roles in a List.
+     */
     @Override
     public List<String> findRoles(String username) {
         Member member = memberRepository.findById(username).orElseThrow(() -> new EntityNotFoundException("Member not found: " + username));
@@ -57,6 +82,13 @@ public class MemberServiceImpl implements MemberService {
         ).toList();
     }
 
+
+    /**
+     * Performs a registration of a new member.
+     *
+     * @param registerRequest of the member.
+     * @return the registered member.
+     */
     @Override
     public Member register(RegisterRequest registerRequest) {
         if (memberRepository.existsById(registerRequest.username())) {
@@ -80,6 +112,13 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.save(member);
     }
 
+
+    /**
+     * Performs a login.
+     *
+     * @param loginRequest credentials of the request.
+     * @return a Member object.
+     */
     @Override
     public Member login(LoginRequest loginRequest) {
         Optional<Member> member_ = memberRepository.findById(loginRequest.username());

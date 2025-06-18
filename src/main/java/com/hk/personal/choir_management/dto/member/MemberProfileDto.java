@@ -2,7 +2,7 @@ package com.hk.personal.choir_management.dto.member;
 
 import java.time.LocalDate;
 
-public record MemberProfileResponse(
+public record MemberProfileDto(
         String username,
         String name,
         String email,

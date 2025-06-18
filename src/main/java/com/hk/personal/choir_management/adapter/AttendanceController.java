@@ -21,7 +21,11 @@ public class AttendanceController {
         this.choirManagementBusinessService = choirManagementBusinessService;
     }
 
-    // GET ALL ATTENDANCE
+    /**
+     * Returns all member with their respective attendances.
+     *
+     * @return the attendances of the members
+     */
     @GetMapping(value = "")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("isAuthenticated()")
