@@ -1,0 +1,40 @@
+<style>
+  mat-grid-tile {
+    background: lightblue;
+  }
+</style>
+
+<!-- Center vertically and horizontally -->
+<div
+  class="container h-100 d-flex align-items-center justify-content-center"
+  style="border: 1px solid black"
+>
+  <div class="container">
+    <!-- TITLE / LOGO -->
+    <div class="row align-items-center justify-content-center">
+      <div class="col-6 text-center" style="border: 1px solid black">
+        <h2>Choir Management App</h2>
+      </div>
+    </div>
+
+    <!-- BUTTONS -->
+    <div class="row align-items-center justify-content-center">
+      <div class="col-6" style="border: 1px solid black">
+        <button
+          matButton="outlined"
+          (click)="navigateTo('login')"
+          class="w-100 mt-2"
+        >
+          Login
+        </button>
+        <button
+          matButton="filled"
+          (click)="navigateTo('register')"
+          class="w-100 mt-2"
+        >
+          Register
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

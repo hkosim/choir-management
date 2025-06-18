@@ -1,0 +1,41 @@
+<mat-drawer-container class="h-100">
+  <!-- SIDE NAVBAR -->
+  <mat-drawer #sidenav mode="side" opened class="drawer">
+    <mat-nav-list>
+      <span class="m-1 text-center">
+        <div class="container">
+          <div class="row">
+            <div class="col-4">Image</div>
+            <div class="col-8">username</div>
+          </div>
+        </div>
+      </span>
+      <a mat-list-item routerLink="appointments">Appointments</a>
+      <a mat-list-item routerLink="buttons">Buttons</a>
+    </mat-nav-list>
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <mat-toolbar color="primary">
+      <!-- HAMBURGER -->
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="toolbar-title"> Choir Management </span>
+      <span class="spacer"></span>
+      <!-- LOGOUT -->
+      <button mat-icon-button (click)="logout()">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <div class="container-fluid p-3">
+      <!-- Your routed content will appear here -->
+      <div class="row">
+        <div class="col-12">
+          <router-outlet />
+        </div>
+      </div>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

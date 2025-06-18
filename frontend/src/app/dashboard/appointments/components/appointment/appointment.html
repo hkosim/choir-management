@@ -1,0 +1,38 @@
+<mat-card appearance="outlined" class="mt-3">
+  <mat-card-header>
+    <mat-card-subtitle>
+      {{appointment().date}} {{appointment().time}}
+    </mat-card-subtitle>
+    <mat-card-title>
+      <!-- Rehearsal -->
+      <span>
+        @if (appointment().type==="REHEARSAL") {
+        <mat-icon matTooltip="Rehearsal" matTooltipPosition="before">
+          music_note
+        </mat-icon>
+        } @else {
+        <mat-icon matTooltip="Performance" matTooltipPosition="before">
+          celebration
+        </mat-icon>
+        }
+      </span>
+      {{appointment().title}}
+    </mat-card-title>
+    <mat-card-subtitle> {{appointment().description}} </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-actions align="end">
+    <mat-button-toggle-group
+      [(ngModel)]="attendance"
+      (change)="onAttendanceChange($event)"
+      aria-label="Attendance"
+      hideSingleSelectionIndicator="true"
+    >
+      <mat-button-toggle [value]="false" class="no-button">
+        <mat-icon>clear</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle [value]="true" class="yes-button">
+        <mat-icon>check</mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </mat-card-actions>
+</mat-card>
