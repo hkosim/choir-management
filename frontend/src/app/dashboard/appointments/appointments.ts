@@ -31,11 +31,7 @@ import { errorContext } from 'rxjs/internal/util/errorContext';
   selector: 'app-appointments',
   imports: [
     AppointmentComponent,
-    MatCardModule,
-    MatButtonModule,
     MatButtonToggleModule,
-    FormsModule,
-    ReactiveFormsModule,
     MatIconModule,
     MatPaginatorModule,
     MatTooltipModule,
@@ -45,7 +41,6 @@ import { errorContext } from 'rxjs/internal/util/errorContext';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Appointments implements OnInit {
-  private formBuilder = inject(FormBuilder);
   private appointmentService = inject(AppointmentService);
   private destroyRef = inject(DestroyRef);
   private snackBar = inject(MatSnackBar);
@@ -55,7 +50,9 @@ export class Appointments implements OnInit {
   ngOnInit(): void {}
 
   onChangePage() {
-    this.snackBar.open('Page change', 'close');
+    this.snackBar.open('Page change', 'close', {
+      duration: 3000,
+    });
   }
 
   // Save the attendance in database
@@ -66,7 +63,9 @@ export class Appointments implements OnInit {
       .subscribe({
         next: () => {
           // Popup
-          this.snackBar.open('Appointment saved.', 'close');
+          this.snackBar.open('Appointment saved.', 'close', {
+            duration: 3000,
+          });
         },
         error: (error: Error) => {
           console.log(error);

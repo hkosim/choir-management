@@ -4,8 +4,6 @@ import {
   input,
   OnInit,
   output,
-  Signal,
-  WritableSignal,
 } from '@angular/core';
 import { Appointment as AppointmentModel } from '../../model/appointment.model';
 import { MatCardModule } from '@angular/material/card';
@@ -16,6 +14,7 @@ import {
   MatButtonToggleModule,
 } from '@angular/material/button-toggle';
 import { FormsModule } from '@angular/forms';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-appointment',
@@ -25,6 +24,7 @@ import { FormsModule } from '@angular/forms';
     MatButtonModule,
     MatButtonToggleModule,
     FormsModule,
+    MatTooltipModule,
   ],
   templateUrl: './appointment.html',
   styleUrl: './appointment.scss',

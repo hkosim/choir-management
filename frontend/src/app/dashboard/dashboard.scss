@@ -1,8 +1,27 @@
 .drawer {
   width: 240px;
-  background-color: #8ab8e9; // Light pastel blue
+  &.user {
+    background-color: #8ab8e9; // Light pastel blue
+  }
+
+  &.admin {
+    background-color: #f28b82; // Light red
+  }
 }
 
 .spacer {
   flex: 1 1 auto;
+}
+
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center; // ⬅ Ensures vertical alignment
+  gap: 8px;
+}
+
+.profile-text {
+  margin: 0; // ⬅ Remove default h5 margin
+  line-height: 2; // ⬅ Ensure it doesn't misalign
 }

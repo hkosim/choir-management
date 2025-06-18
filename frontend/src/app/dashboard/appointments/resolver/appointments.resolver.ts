@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AppointmentService } from '../service/appointment.service';
 import { lastValueFrom } from 'rxjs';
 
-export async function resolveAppointment(
+export async function resolveAppointments(
   activatedRouteSnapshot: ActivatedRouteSnapshot,
   routerState: RouterStateSnapshot
 ) {

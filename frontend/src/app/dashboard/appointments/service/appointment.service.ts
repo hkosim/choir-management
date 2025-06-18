@@ -4,7 +4,7 @@ import {
   HttpErrorResponse,
   HttpHeaders,
 } from '@angular/common/http';
-import { tap, catchError, throwError, timeout, delay } from 'rxjs';
+import { tap, catchError, throwError, timeout, delay, Observable } from 'rxjs';
 import { AppointmentPage } from '../model/appointment-page.model';
 import { environment } from '../../../../environments/environment';
 import { Appointment } from '../model/appointment.model';
@@ -40,6 +40,31 @@ export class AppointmentService {
         timeout(2000),
         tap({
           next: (appointmentPage: AppointmentPage) => {},
+        }),
+        catchError((httpErrorResponse: HttpErrorResponse) => {
+          return throwError(() => httpErrorResponse.error);
+        })
+      );
+  }
+
+  /**
+   * Fetch an appointment
+   * @params id of the appointment
+   * @returns An observable of the Appointment.
+   */
+  public getAppointment(id:number):Observable<Appointment> {
+    // TODO: Check if user logged in with INTERCEPTOR
+    const token = sessionStorage.getItem('token');
+    const username = sessionStorage.getItem('username');
+
+    return this.httpClient
+      .get<Appointment>(this.apiUrl + '/api/appointments/'+id, {
+        headers: new HttpHeaders().set('Authorization', 'Basic ' + token!),
+      })
+      .pipe(
+        timeout(2000),
+        tap({
+          next: (appointment: Appointment) => {},
         }),
         catchError((httpErrorResponse: HttpErrorResponse) => {
           return throwError(() => httpErrorResponse.error);

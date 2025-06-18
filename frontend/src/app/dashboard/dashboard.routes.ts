@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { Appointments } from './appointments/appointments';
-import { resolveAppointments } from './appointments/resolver/appointment.resolver';
+import { AdminGuard } from '../auth/guards/admin.guard';
+import { EditAppointment } from './appointments/components/edit-appointment/edit-appointment';
+import { resolveAppointments } from './appointments/resolver/appointments.resolver';
 
 export const dashboardRoutes: Routes = [
   {
@@ -11,4 +13,11 @@ export const dashboardRoutes: Routes = [
       appointmentPage: resolveAppointments,
     },
   },
+  {
+    path: 'appointments/edit/:id',
+    component: EditAppointment,
+    runGuardsAndResolvers: 'always',
+    canActivate:[AdminGuard],
+  },
+  
 ];

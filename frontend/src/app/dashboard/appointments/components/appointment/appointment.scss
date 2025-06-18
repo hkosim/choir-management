@@ -15,3 +15,32 @@
     )
   );
 }
+
+.card-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+
+  .title-text {
+    font-size: 1.1rem;
+    color: #2e2e2e;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .action-icons {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .action-icons button {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+  }
+}
