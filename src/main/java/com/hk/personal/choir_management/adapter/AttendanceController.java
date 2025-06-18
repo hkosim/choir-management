@@ -26,7 +26,7 @@ public class AttendanceController {
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("isAuthenticated()")
     public List<MemberAttendanceDto> getAllAttendances() {
-        return choirManagementBusinessService.findAllAttendances();
+        return choirManagementBusinessService.getAllAttendances();
     }
 
 }

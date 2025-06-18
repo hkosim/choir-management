@@ -1,0 +1,58 @@
+<mat-card class="mb-3">
+    <!-- First Row: Title + Save -->
+    <div class="row align-items-center mb-2">
+      <div class="col-md-10">
+        <mat-form-field class="w-100" appearance="fill">
+          <mat-label>Song Title</mat-label>
+          <input matInput formControlName="title" required />
+        </mat-form-field>
+      </div>
+      <div class="col-md-2 text-end">
+        <button mat-raised-button color="primary" type="submit">
+          <mat-icon>save</mat-icon> Save
+        </button>
+      </div>
+    </div>
+
+    <!-- Second Row: Composer, Musical Key, Voice Arrangement, Delete -->
+    <div class="row align-items-center mb-2">
+      <div class="col-md-3">
+        <mat-form-field class="w-100" appearance="fill">
+          <mat-label>Composer</mat-label>
+          <input matInput formControlName="composer" />
+        </mat-form-field>
+      </div>
+      <div class="col-md-3">
+        <mat-form-field class="w-100" appearance="fill">
+          <mat-label>Musical Key</mat-label>
+          <input matInput formControlName="musicalKey" />
+        </mat-form-field>
+      </div>
+      <div class="col-md-4">
+        <mat-form-field class="w-100" appearance="fill">
+          <mat-label>Voice Arrangement</mat-label>
+          <input matInput formControlName="voiceArrangement" />
+        </mat-form-field>
+      </div>
+      <div class="col-md-2 text-end">
+        <button
+          mat-icon-button
+          color="warn"
+          type="button"
+          (click)="removeSong()"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Third Row: Source -->
+    <div class="row">
+      <div class="col-12">
+        <mat-form-field class="w-100" appearance="fill">
+          <mat-label>Source</mat-label>
+          <textarea matInput formControlName="source" rows="2"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+</mat-card>

@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/members")
 public class MemberController {
@@ -30,13 +32,33 @@ public class MemberController {
         return choirManagementBusinessService.register(registerRequest);
     }
 
-    // LOGIN
+    /**
+     * Log in the user.
+     *
+     * @param loginRequest the login credentials.
+     * @return the authentication result.
+     */
     @PostMapping(value = "/login")
     @ResponseStatus(HttpStatus.OK)
     public LoginResponse login(
             @RequestBody LoginRequest loginRequest
     ) {
         return choirManagementBusinessService.login(loginRequest);
+    }
+
+    /**
+     * Get roles
+     *
+     * @param username the login credentials.
+     * @return the authentication result.
+     */
+    @GetMapping(value = "/roles/{username}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("isAuthenticated()")
+    public List<String> getRoles(
+            @PathVariable String username
+    ) {
+        return choirManagementBusinessService.getRoles(username);
     }
 
     // Get User Result By Id
@@ -56,7 +78,7 @@ public class MemberController {
     public Page<Member> getAllMembers(
             @PageableDefault(sort = "username") Pageable pageable
     ) {
-        return choirManagementBusinessService.findAllMembers(pageable);
+        return choirManagementBusinessService.getAllMembers(pageable);
     }
 
 

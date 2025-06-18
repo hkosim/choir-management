@@ -1,18 +1,30 @@
 <mat-drawer-container class="h-100">
   <!-- SIDE NAVBAR -->
-  <mat-drawer #sidenav [mode]="drawerMode" [opened]="drawerOpened" class="drawer" [ngClass]="userRole">
+  <mat-drawer
+    #sidenav
+    [mode]="drawerMode"
+    [opened]="drawerOpened"
+    class="drawer"
+    [ngClass]="userRole"
+  >
     <mat-nav-list>
       <div class="profile-row p-3">
         <h5 class="profile-text">Hello, {{ username }}!</h5>
-        <button mat-icon-button (click)="navigateTo('')">
-          <mat-icon>open_in_new</mat-icon>
-        </button>
+        <span class="pb-1">
+          <button mat-icon-button (click)="navigateTo('appointments/list')">
+            <mat-icon>open_in_new</mat-icon>
+          </button>
+        </span>
       </div>
-      <a mat-list-item routerLink="appointments" class="mt-1">Appointments</a>
+      <a mat-list-item routerLink="appointments/list" class="mt-1"
+        >Appointments</a
+      >
       @if (userRole === 'admin') {
 
-      <a mat-list-item routerLink="appointments" class="mt-1">Members</a>
-      <a mat-list-item routerLink="appointments" class="mt-1">Statistics</a>
+      <a mat-list-item routerLink="appointments/list" class="mt-1">Members</a>
+      <a mat-list-item routerLink="appointments/list" class="mt-1"
+        >Statistics</a
+      >
       }
     </mat-nav-list>
   </mat-drawer>

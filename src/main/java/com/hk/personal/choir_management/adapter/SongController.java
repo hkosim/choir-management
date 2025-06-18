@@ -29,7 +29,7 @@ public class SongController {
     public Page<Song> getAllSongs(
             @PageableDefault(sort = "id") Pageable pageable
     ) {
-        return choirManagementBusinessService.findAllSongs(pageable);
+        return choirManagementBusinessService.getSongs(pageable);
     }
 
 

@@ -24,7 +24,7 @@ export class AuthService {
   private httpClient = inject(HttpClient);
   private router = inject(Router);
 
-  public getUsername():string {
+  public getUsername(): string {
     return sessionStorage.getItem('username')!;
   }
 
@@ -66,19 +66,12 @@ export class AuthService {
   public getRoles(username: string): Observable<String[]> {
     // TODO: Check if user logged in with guards
     const token = sessionStorage.getItem('token');
-
+    const headers = new HttpHeaders().set('Authorization', 'Basic ' + token!);
     return this.httpClient
       .get<String[]>(this.apiUrl + '/api/members/roles/' + username, {
-        headers: new HttpHeaders().set('Authorization', 'Basic ' + token!),
+        headers,
       })
       .pipe(
-        delay(1000),
-        timeout(2000 + 1000),
-        tap({
-          next: (roles: String[]) => {
-            console.log(roles);
-          },
-        }),
         catchError((httpErrorResponse: HttpErrorResponse) => {
           return throwError(() => httpErrorResponse.error);
         })

@@ -111,7 +111,7 @@ export class Login {
     const subscription = this.authService.login(loginRequest).subscribe({
       next: (loginResponse: LoginResponse) => {
         this.isLoggingIn = false;
-        this.router.navigate(['dashboard', 'appointments']);
+        this.router.navigate(['dashboard', 'appointments', 'list']);
       },
       error: () => {
         this.errorMessage.set('Invalid credentials.');

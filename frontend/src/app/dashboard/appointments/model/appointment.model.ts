@@ -1,6 +1,6 @@
 export interface Appointment {
   id: number;
-  type: 'REHEARSAL' | 'PERFORMANCE'; // String union for stricter typing
+  type: 'rehearsal' | 'performance'; // String union for stricter typing
   title: string;
   description: string;
   date: string; // ISO format e.g. "2025-06-17"

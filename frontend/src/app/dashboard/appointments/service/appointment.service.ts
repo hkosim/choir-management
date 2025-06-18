@@ -9,6 +9,8 @@ import { AppointmentPage } from '../model/appointment-page.model';
 import { environment } from '../../../../environments/environment';
 import { Appointment } from '../model/appointment.model';
 import { AttendanceUpdateRequest } from '../model/attendance-update-request.model';
+import { Performance } from '../model/performance.model';
+import { Rehearsal } from '../model/rehearsal.model';
 
 /**
  * Service for user-related API operations.
@@ -17,7 +19,7 @@ import { AttendanceUpdateRequest } from '../model/attendance-update-request.mode
   providedIn: 'root',
 })
 export class AppointmentService {
-  private apiUrl = environment.apiUrl; // Dynamic URL based on environment
+  private apiUrl = environment.apiUrl + '/api/appointments'; // Dynamic URL based on environment
 
   private httpClient = inject(HttpClient);
 
@@ -30,7 +32,7 @@ export class AppointmentService {
     const token = sessionStorage.getItem('token');
     const username = sessionStorage.getItem('username');
     return this.httpClient
-      .get<AppointmentPage>(this.apiUrl + '/api/appointments', {
+      .get<AppointmentPage>(this.apiUrl, {
         headers: new HttpHeaders().set('Authorization', 'Basic ' + token!),
         params: {
           username: username!,
@@ -49,54 +51,74 @@ export class AppointmentService {
 
   /**
    * Fetch an appointment
+   * @params type of the appointment
    * @params id of the appointment
    * @returns An observable of the Appointment.
    */
-  public getAppointment(id:number):Observable<Appointment> {
-    // TODO: Check if user logged in with INTERCEPTOR
+  public getAppointment(
+    type: 'rehearsal' | 'performance',
+    id: string
+  ): Observable<Rehearsal | Performance> {
+    // TODO: Interceptor
     const token = sessionStorage.getItem('token');
-    const username = sessionStorage.getItem('username');
+    const headers = new HttpHeaders().set('Authorization', 'Basic ' + token!);
+
+    const url = `${this.apiUrl}/appointment/${type.toLowerCase()}/${id}`;
 
     return this.httpClient
-      .get<Appointment>(this.apiUrl + '/api/appointments/'+id, {
-        headers: new HttpHeaders().set('Authorization', 'Basic ' + token!),
-      })
+      .get<Rehearsal | Performance>(url, { headers })
       .pipe(
-        timeout(2000),
-        tap({
-          next: (appointment: Appointment) => {},
-        }),
-        catchError((httpErrorResponse: HttpErrorResponse) => {
-          return throwError(() => httpErrorResponse.error);
-        })
+        catchError((error: HttpErrorResponse) => throwError(() => error.error))
       );
   }
 
   /**
-   * Update an changed
-   * @param updatedAppointment an object of updated appointment.
+   * Fetch an appointment
+   * @params type of the appointment
+   * @params id of the appointment
+   * @returns An observable of the Appointment.
+   */
+  public updateAppointment(
+    appointment: Rehearsal | Performance
+  ): Observable<Rehearsal | Performance> {
+    // TODO: Interceptor
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', 'Basic ' + token!);
+
+    const { type, present, ...appointmentRequest } = appointment;
+    const url = `${this.apiUrl}/${type.toLowerCase()}/save`;
+
+    return this.httpClient
+      .post<Rehearsal | Performance>(url, appointmentRequest, { headers })
+      .pipe(
+        tap((appointment: Rehearsal | Performance) => {
+          console.log(appointment);
+        }),
+        catchError((error: HttpErrorResponse) => throwError(() => error.error))
+      );
+  }
+
+  /**
+   * Update an changed attendance for an appointment
+   * @param updatedAttendance an object of updated appointment.
    * @returns An observable of the saved appointment.
    */
-  public updateAppointment(updatedAppointment: Appointment) {
+  public updateAttendance(updatedAttendance: Appointment) {
     // TODO: Check if user logged in with INTERCEPTOR
     const token = sessionStorage.getItem('token');
     const username = sessionStorage.getItem('username');
 
     const attendanceUpdateRequest: AttendanceUpdateRequest = {
       username: username!,
-      id: updatedAppointment.id,
-      type: updatedAppointment.type,
-      present: updatedAppointment.present,
+      id: updatedAttendance.id,
+      type: updatedAttendance.type,
+      present: updatedAttendance.present,
     };
 
     return this.httpClient
-      .post<Appointment>(
-        this.apiUrl + '/api/appointments/save',
-        attendanceUpdateRequest,
-        {
-          headers: new HttpHeaders().set('Authorization', 'Basic ' + token),
-        }
-      )
+      .post<Appointment>(this.apiUrl + '/save', attendanceUpdateRequest, {
+        headers: new HttpHeaders().set('Authorization', 'Basic ' + token),
+      })
       .pipe(
         tap({
           next: (appointmentPage: Appointment) => {},

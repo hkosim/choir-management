@@ -14,6 +14,7 @@ public interface MemberService {
 
     List<Member> findAll();
     Member findByUsername(String username);
+    List<String> findRoles(String username);
 
     Member register(RegisterRequest registerRequest);
     Member login(LoginRequest loginRequest);

@@ -1,5 +1,6 @@
 package com.hk.personal.choir_management.entity;
 
+import com.hk.personal.choir_management.entity.superclass.Appointment;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -8,70 +9,17 @@ import java.util.List;
 
 @Entity
 @Table(name = "performances")
-public class Performance {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String name;
-    private String description;
-
-    private LocalDate date;
-    private LocalTime time;
+public class Performance extends Appointment {
 
     @ManyToMany
     private List<Song> songs;
 
-    @Override
-    public String toString() {
-        return "Performance{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", date=" + date +
-                ", time=" + time +
-                ", songs=" + songs +
-                '}';
+    public Performance() {
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public LocalTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalTime time) {
-        this.time = time;
+    public Performance(Long id, String title, String description, LocalDate date, LocalTime time, String location, List<Song> songs) {
+        super(id, title, description, date, time, location);
+        this.songs = songs;
     }
 
     public List<Song> getSongs() {
@@ -82,15 +30,10 @@ public class Performance {
         this.songs = songs;
     }
 
-    public Performance() {
-    }
-
-    public Performance(Long id, String name, String description, LocalDate date, LocalTime time, List<Song> songs) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.date = date;
-        this.time = time;
-        this.songs = songs;
+    @Override
+    public String toString() {
+        return "Performance{" +
+                "songs=" + songs +
+                '}';
     }
 }

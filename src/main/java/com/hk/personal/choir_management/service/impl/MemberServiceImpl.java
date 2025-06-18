@@ -7,6 +7,7 @@ import com.hk.personal.choir_management.entity.Authority;
 import com.hk.personal.choir_management.entity.Member;
 import com.hk.personal.choir_management.repository.MemberRepository;
 import com.hk.personal.choir_management.service.MemberService;
+import jakarta.persistence.EntityNotFoundException;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,6 +47,14 @@ public class MemberServiceImpl implements MemberService {
             return _member.get();
         }
         throw new RuntimeException();
+    }
+
+    @Override
+    public List<String> findRoles(String username) {
+        Member member = memberRepository.findById(username).orElseThrow(() -> new EntityNotFoundException("Member not found: " + username));
+        return member.getAuthorities().stream().map(
+                Authority::getAuthority
+        ).toList();
     }
 
     @Override

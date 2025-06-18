@@ -1,1 +1,118 @@
-<p>edit-appointment works!</p>
+<mat-card class="p-3">
+  <mat-card-title>Edit Appointment</mat-card-title>
+  <mat-card-content class="mt-3">
+    <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field class="w-100">
+            <mat-label>Title</mat-label>
+            <input matInput formControlName="title" required />
+          </mat-form-field>
+        </div>
+        <div class="col-md-6">
+          <mat-form-field class="w-100">
+            <mat-label>Location</mat-label>
+            <input matInput formControlName="location" />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <mat-form-field class="w-100">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description"></textarea>
+      </mat-form-field>
+
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field class="w-100">
+            <mat-label>Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date" />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="col-md-6">
+          <mat-form-field class="w-100">
+            <mat-label>Time</mat-label>
+            <input matInput type="time" formControlName="time" />
+          </mat-form-field>
+        </div>
+      </div>
+
+      @if (appointmentForm.get('type')?.value === 'PERFORMANCE') {
+      <div>
+        <h5 class="mt-3">Songs</h5>
+        <div formArrayName="songs" class="mb-2">
+          <div
+            *ngFor="let song of songs.controls; let i = index"
+            [formGroupName]="i"
+            class="row align-items-center mb-3"
+          >
+            <div class="col-md-5">
+              <mat-form-field class="w-100" appearance="fill">
+                <mat-label>Song Title</mat-label>
+                <input matInput formControlName="title" required />
+              </mat-form-field>
+              <mat-form-field class="w-100" appearance="fill">
+                <mat-label>Musical Key</mat-label>
+                <input matInput formControlName="musicalKey" required />
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-5">
+              <mat-form-field class="w-100" appearance="fill">
+                <mat-label>Composer</mat-label>
+                <input matInput formControlName="composer" />
+              </mat-form-field>
+              <mat-form-field class="w-100" appearance="fill">
+                <mat-label>Voice Arrangement</mat-label>
+                <input matInput formControlName="voiceArrangement" />
+              </mat-form-field>
+            </div>
+
+            <!-- Delete Button -->
+            <div
+              class="col-md-2 pb-4 d-flex justify-content-start align-items-center"
+            >
+              <button
+                mat-icon-button
+                color="warn"
+                type="button"
+                (click)="removeSong(i)"
+                aria-label="Remove song"
+              >
+                <mat-icon style="font-size: 20px">delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button mat-button type="button" (click)="addSong()">+ Add Song</button>
+      </div>
+      }
+
+      <div class="mt-3">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="appointmentForm.invalid"
+          class="me-3"
+        >
+          Save
+        </button>
+        <button
+          mat-raised-button
+          type="button"
+          (click)="navigateTo('appointments')"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

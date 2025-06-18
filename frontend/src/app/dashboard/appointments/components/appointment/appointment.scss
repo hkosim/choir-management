@@ -32,15 +32,21 @@
     text-overflow: ellipsis;
   }
 
-  .action-icons {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
   .action-icons button {
     width: 36px;
     height: 36px;
     min-width: 36px;
   }
+
+  .mat-icon {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
+// this is the parent span angular inserts for icon inside mat-fab
+// ::ng-deep.mat-fab .mat-button-wrapper {
+//   display: flex !important;
+//   justify-content: center !important;
+// }
