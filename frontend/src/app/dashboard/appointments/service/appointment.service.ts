@@ -4,13 +4,14 @@ import {
   HttpErrorResponse,
   HttpHeaders,
 } from '@angular/common/http';
-import { tap, catchError, throwError, timeout, delay, Observable } from 'rxjs';
-import { AppointmentPage } from '../model/appointment-page.model';
+import { tap, catchError, throwError, timeout, Observable } from 'rxjs';
+import { AppointmentAttendancePage } from '../model/appointment-attendance-page.model';
 import { environment } from '../../../../environments/environment';
 import { Appointment } from '../model/appointment.model';
-import { AttendanceUpdateRequest } from '../model/attendance-update-request.model';
+import { AppointmentAttendanceUpdateRequest } from '../model/appointment-attendance-update-request.model';
 import { Performance } from '../model/performance.model';
 import { Rehearsal } from '../model/rehearsal.model';
+import { AppointmentAttendance } from '../model/appointment-attendance.model';
 
 /**
  * Service for user-related API operations.
@@ -24,15 +25,18 @@ export class AppointmentService {
   private httpClient = inject(HttpClient);
 
   /**
-   * Fetch a page of appointments.
+   * Fetch a page of appointments with member attendances.
    * @returns An observable of the appointments page.
    */
-  public getAppointments() {
+  public getAppointmentAttendancePage() {
     // TODO: Check if user logged in with INTERCEPTOR
     const token = sessionStorage.getItem('token');
     const username = sessionStorage.getItem('username');
+
+    const url: string = `${this.apiUrl}/attendances`;
+
     return this.httpClient
-      .get<AppointmentPage>(this.apiUrl, {
+      .get<AppointmentAttendancePage>(url, {
         headers: new HttpHeaders().set('Authorization', 'Basic ' + token!),
         params: {
           username: username!,
@@ -41,7 +45,38 @@ export class AppointmentService {
       .pipe(
         timeout(2000),
         tap({
-          next: (appointmentPage: AppointmentPage) => {},
+          next: () => {},
+        }),
+        catchError((httpErrorResponse: HttpErrorResponse) => {
+          return throwError(() => httpErrorResponse.error);
+        })
+      );
+  }
+
+  /**
+   * Update an changed attendance for an appointment
+   * @param updatedAttendance an object of updated appointment.
+   * @returns An observable of the saved appointment.
+   */
+  public updateAppointmentAttendance(updatedAttendance: AppointmentAttendance) {
+    // TODO: Check if user logged in with INTERCEPTOR
+    const token = sessionStorage.getItem('token');
+    const username = sessionStorage.getItem('username');
+
+    const attendanceUpdateRequest: AppointmentAttendanceUpdateRequest = {
+      username: username!,
+      id: updatedAttendance.id,
+      type: updatedAttendance.type,
+      present: updatedAttendance.present,
+    };
+
+    return this.httpClient
+      .post<Appointment>(this.apiUrl + '/save', attendanceUpdateRequest, {
+        headers: new HttpHeaders().set('Authorization', 'Basic ' + token),
+      })
+      .pipe(
+        tap({
+          next: () => {},
         }),
         catchError((httpErrorResponse: HttpErrorResponse) => {
           return throwError(() => httpErrorResponse.error);
@@ -73,10 +108,9 @@ export class AppointmentService {
   }
 
   /**
-   * Fetch an appointment
-   * @params type of the appointment
-   * @params id of the appointment
-   * @returns An observable of the Appointment.
+   * Update an appointment.
+   * @params appointment the updated appointment.
+   * @returns An observable of the new Appointment.
    */
   public updateAppointment(
     appointment: Rehearsal | Performance
@@ -85,47 +119,14 @@ export class AppointmentService {
     const token = sessionStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', 'Basic ' + token!);
 
-    const { type, present, ...appointmentRequest } = appointment;
+    const { type, ...appointmentRequest } = appointment;
     const url = `${this.apiUrl}/${type.toLowerCase()}/save`;
 
     return this.httpClient
       .post<Rehearsal | Performance>(url, appointmentRequest, { headers })
       .pipe(
-        tap((appointment: Rehearsal | Performance) => {
-          console.log(appointment);
-        }),
+        tap((appointment: Rehearsal | Performance) => {}),
         catchError((error: HttpErrorResponse) => throwError(() => error.error))
-      );
-  }
-
-  /**
-   * Update an changed attendance for an appointment
-   * @param updatedAttendance an object of updated appointment.
-   * @returns An observable of the saved appointment.
-   */
-  public updateAttendance(updatedAttendance: Appointment) {
-    // TODO: Check if user logged in with INTERCEPTOR
-    const token = sessionStorage.getItem('token');
-    const username = sessionStorage.getItem('username');
-
-    const attendanceUpdateRequest: AttendanceUpdateRequest = {
-      username: username!,
-      id: updatedAttendance.id,
-      type: updatedAttendance.type,
-      present: updatedAttendance.present,
-    };
-
-    return this.httpClient
-      .post<Appointment>(this.apiUrl + '/save', attendanceUpdateRequest, {
-        headers: new HttpHeaders().set('Authorization', 'Basic ' + token),
-      })
-      .pipe(
-        tap({
-          next: (appointmentPage: Appointment) => {},
-        }),
-        catchError((httpErrorResponse: HttpErrorResponse) => {
-          return throwError(() => httpErrorResponse.error);
-        })
       );
   }
 }

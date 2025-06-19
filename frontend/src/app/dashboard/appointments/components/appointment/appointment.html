@@ -2,13 +2,13 @@
   <!-- Date and time -->
   <div class="card-header-row pt-1 ps-3 pe-3">
     <span class="title-text"
-      >{{appointment().date}} {{appointment().time}}</span
+      >{{appointmentAttendance().date}} {{appointmentAttendance().time}}</span
     >
     <div class="action-icons">
       <button
         mat-icon-button
         aria-label="Code"
-        (click)="navigateTo('view', appointment().type, appointment().id)"
+        (click)="navigateTo('view', appointmentAttendance().type, appointmentAttendance().id)"
       >
         <mat-icon>open_in_new</mat-icon>
       </button>
@@ -16,7 +16,7 @@
       @if (userRole === 'admin') {<button
         mat-icon-button
         aria-label="Code"
-        (click)="navigateTo('edit', appointment().type, appointment().id)"
+        (click)="navigateTo('edit', appointmentAttendance().type, appointmentAttendance().id)"
       >
         <mat-icon>edit</mat-icon>
       </button>
@@ -30,7 +30,7 @@
     <mat-card-title>
       <!-- ICONS -->
       <span>
-        @if (appointment().type==="rehearsal") {
+        @if (appointmentAttendance().type==="rehearsal") {
         <mat-icon matTooltip="Rehearsal" matTooltipPosition="before">
           music_note
         </mat-icon>
@@ -40,11 +40,11 @@
         </mat-icon>
         }
       </span>
-      <span class="pb-2"> {{appointment().title}} </span>
+      <span class="pb-2"> {{appointmentAttendance().title}} </span>
     </mat-card-title>
 
     <mat-card-subtitle class="mt-2">
-      {{appointment().description}}
+      {{appointmentAttendance().description}}
     </mat-card-subtitle>
   </mat-card-header>
 

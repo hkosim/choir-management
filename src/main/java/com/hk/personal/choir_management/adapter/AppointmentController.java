@@ -4,6 +4,7 @@ import com.hk.personal.choir_management.business.service.ChoirManagementBusiness
 import com.hk.personal.choir_management.dto.AppointmentView;
 import com.hk.personal.choir_management.dto.appointment.AppointmentAttendanceDto;
 import com.hk.personal.choir_management.dto.appointment.AppointmentAttendanceRequestDto;
+import com.hk.personal.choir_management.entity.Performance;
 import com.hk.personal.choir_management.entity.Rehearsal;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +30,7 @@ public class AppointmentController {
      * @param username the user's username
      * @return the attendances of the members
      */
-    @GetMapping(value = "")
+    @GetMapping(value = "/attendances")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("isAuthenticated()")
     public Page<AppointmentAttendanceDto> getAppointments(
@@ -69,6 +70,21 @@ public class AppointmentController {
             @RequestBody Rehearsal rehearsal
     ) {
         return choirManagementBusinessService.saveRehearsal(rehearsal);
+    }
+
+    /**
+     * Updates a performance
+     *
+     * @param performance Performance object
+     * @return an updated performance.
+     */
+    @PostMapping(value = "/performance/save")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
+    public Performance updatePerformance(
+            @RequestBody Performance performance
+    ) {
+        return choirManagementBusinessService.savePerformance(performance);
     }
 
     /**

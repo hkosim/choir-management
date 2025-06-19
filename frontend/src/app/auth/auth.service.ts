@@ -42,8 +42,6 @@ export class AuthService {
         password: loginRequest.password,
       })
       .pipe(
-        delay(1000),
-        timeout(2000 + 1000),
         tap({
           next: (loginResponse: LoginResponse) => {
             // Save login details

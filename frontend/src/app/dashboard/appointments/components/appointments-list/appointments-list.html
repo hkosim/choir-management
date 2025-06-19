@@ -3,8 +3,8 @@
   <h2 class="mb-3">Appointments</h2>
   <!-- Paginator (up) -->
   <mat-paginator
-    [length]="appointmentPage().page.totalElements"
-    [pageSize]="appointmentPage().page.size"
+    [length]="appointmentAttendancePage().page.totalElements"
+    [pageSize]="appointmentAttendancePage().page.size"
     [pageSizeOptions]="[5, 10]"
     aria-label="Select page"
     (page)="onChangePage()"
@@ -12,9 +12,9 @@
   </mat-paginator>
 
   <!-- Appointments -->
-  @for (appointment of appointmentPage().content; track $index) {
+  @for (appointment of appointmentAttendancePage().content; track $index) {
   <app-appointment
-    [appointment]="appointment"
+    [appointmentAttendance]="appointment"
     (attendanceChanged)="saveAttendance($event)"
   />
 

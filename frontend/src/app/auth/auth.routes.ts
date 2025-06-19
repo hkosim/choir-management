@@ -7,9 +7,11 @@ export const authRoutes: Routes = [
   {
     path: 'register',
     component: Register,
+    title: 'Register - CMA',
   },
   {
     path: 'login',
     component: Login,
+    title: 'Login - CMA',
   },
 ];

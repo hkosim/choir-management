@@ -28,6 +28,11 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { AppointmentService } from '../../service/appointment.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTimepickerModule } from '@angular/material/timepicker';
+import {
+  formatDateToIso,
+  formatTimeToIso,
+} from '../../../../shared/utils/utils';
 
 @Component({
   selector: 'app-edit-appointment',
@@ -42,6 +47,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatButtonModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatTimepickerModule,
     MatIconModule,
   ],
   templateUrl: './edit-appointment.html',
@@ -62,13 +68,20 @@ export class EditAppointment implements OnInit {
   appointmentForm!: FormGroup;
 
   ngOnInit(): void {
+    const timeArray: number[] = this.appointment()
+      .time.split(':')
+      .map((s) => parseInt(s));
+
+    const initialTime = new Date();
+    initialTime.setHours(timeArray[0], timeArray[1], timeArray[2]);
+
     this.appointmentForm = this.formBuilder.group({
       id: [this.appointment().id],
       type: [this.appointment().type],
       title: [this.appointment().title, Validators.required],
       description: [this.appointment().description],
       date: [this.appointment().date, Validators.required],
-      time: [this.appointment().time, Validators.required],
+      time: [initialTime, Validators.required],
       location: [this.appointment().location],
     });
 
@@ -108,39 +121,42 @@ export class EditAppointment implements OnInit {
   }
 
   onSubmit(): void {
-    // TODO: Submit
-    console.log(this.appointmentForm.value);
     if (this.appointmentForm.invalid) {
       return;
     }
 
-    // Submit logic here
-    if (this.appointment().type === 'rehearsal') {
-      const updatedRehearsal: Rehearsal = {
-        id: this.appointment().id,
-        type: 'rehearsal', // String union for stricter typing
-        title: this.appointmentForm.value.title!,
-        description: this.appointmentForm.value.description!,
-        date: this.appointmentForm.value.date,
-        time: this.appointmentForm.value.time,
-        location: this.appointmentForm.value.location,
-        present: this.appointment().present,
+    let updatedAppointment: Rehearsal | Performance = {
+      id: this.appointment().id,
+      type: this.appointment().type,
+      title: this.appointmentForm.value.title!,
+      description: this.appointmentForm.value.description!,
+      date: formatDateToIso(this.appointmentForm.value.date)!,
+      time: formatTimeToIso(this.appointmentForm.value.time)!,
+      location: this.appointmentForm.value.location,
+    };
+    console.log(updatedAppointment);
+
+    // Submit the appointment to the
+    if (this.appointment().type === 'performance') {
+      updatedAppointment = {
+        ...updatedAppointment,
+        songs: this.appointmentForm.value.songs,
       };
-
-      const subscription = this.appointmentService
-        .updateAppointment(updatedRehearsal)
-        .subscribe({
-          next: () => {
-            // Go back to dashboard/appointments/list
-            this.snackBar.open('Appointment saved successfully!', 'close', {
-              duration: 3000,
-            });
-            this.router.navigate(['dashboard', 'appointments', 'list']);
-          },
-        });
-
-      this.destroyRef.onDestroy(() => subscription.unsubscribe());
     }
+
+    const subscription = this.appointmentService
+      .updateAppointment(updatedAppointment)
+      .subscribe({
+        next: () => {
+          // Go back to dashboard/appointments/list
+          this.snackBar.open('Appointment saved successfully!', 'close', {
+            duration: 3000,
+          });
+          this.router.navigate(['dashboard', 'appointments', 'list']);
+        },
+      });
+
+    this.destroyRef.onDestroy(() => subscription.unsubscribe());
   }
 
   navigateTo(route: string) {

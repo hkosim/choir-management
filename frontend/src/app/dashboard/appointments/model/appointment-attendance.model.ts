@@ -1,5 +1,5 @@
 import { Appointment } from './appointment.model';
 
-export interface Attendance extends Appointment {
+export interface AppointmentAttendance extends Appointment {
   present: boolean;
 }

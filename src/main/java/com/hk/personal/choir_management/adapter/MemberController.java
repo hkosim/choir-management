@@ -1,6 +1,7 @@
 package com.hk.personal.choir_management.adapter;
 
 import com.hk.personal.choir_management.business.service.ChoirManagementBusinessService;
+import com.hk.personal.choir_management.dto.attendance.MemberAttendanceDto;
 import com.hk.personal.choir_management.dto.member.*;
 import com.hk.personal.choir_management.entity.Member;
 import org.springframework.data.domain.Page;
@@ -94,6 +95,16 @@ public class MemberController {
         return choirManagementBusinessService.getAllMembers(pageable);
     }
 
-
+    /**
+     * Returns all member with their respective attendances.
+     *
+     * @return the attendances of the members
+     */
+    @GetMapping(value = "/attendances")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<MemberAttendanceDto> getAllAttendances() {
+        return choirManagementBusinessService.getAllAttendances();
+    }
 
 }

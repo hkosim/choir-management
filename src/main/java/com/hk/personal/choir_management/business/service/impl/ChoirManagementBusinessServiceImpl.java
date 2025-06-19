@@ -6,10 +6,7 @@ import com.hk.personal.choir_management.dto.appointment.AppointmentAttendanceDto
 import com.hk.personal.choir_management.dto.appointment.AppointmentAttendanceRequestDto;
 import com.hk.personal.choir_management.dto.attendance.MemberAttendanceDto;
 import com.hk.personal.choir_management.dto.member.*;
-import com.hk.personal.choir_management.entity.Authority;
-import com.hk.personal.choir_management.entity.Member;
-import com.hk.personal.choir_management.entity.Rehearsal;
-import com.hk.personal.choir_management.entity.Song;
+import com.hk.personal.choir_management.entity.*;
 import com.hk.personal.choir_management.service.AppointmentService;
 import com.hk.personal.choir_management.service.AttendanceService;
 import com.hk.personal.choir_management.service.MemberService;
@@ -126,5 +123,10 @@ public class ChoirManagementBusinessServiceImpl implements ChoirManagementBusine
     @Override
     public Rehearsal saveRehearsal(Rehearsal rehearsal) {
         return appointmentService.saveRehearsal(rehearsal);
+    }
+
+    @Override
+    public Performance savePerformance(Performance performance) {
+        return appointmentService.savePerformance(performance);
     }
 }

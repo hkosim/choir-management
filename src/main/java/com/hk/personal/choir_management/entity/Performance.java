@@ -11,7 +11,7 @@ import java.util.List;
 @Table(name = "performances")
 public class Performance extends Appointment {
 
-    @ManyToMany
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private List<Song> songs;
 
     public Performance() {

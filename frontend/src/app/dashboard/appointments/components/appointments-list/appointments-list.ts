@@ -1,10 +1,10 @@
 import { Component, DestroyRef, inject, input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AppointmentPage } from '../../model/appointment-page.model';
-import { Appointment as AppointmentModel } from '../../model/appointment.model';
+import { AppointmentAttendancePage } from '../../model/appointment-attendance-page.model';
 import { AppointmentService } from '../../service/appointment.service';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { Appointment } from '../appointment/appointment';
+import { AppointmentAttendance } from '../../model/appointment-attendance.model';
 
 @Component({
   selector: 'app-appointments-list',
@@ -17,7 +17,7 @@ export class AppointmentsList implements OnInit {
   private destroyRef = inject(DestroyRef);
   private snackBar = inject(MatSnackBar);
 
-  appointmentPage = input.required<AppointmentPage>();
+  appointmentAttendancePage = input.required<AppointmentAttendancePage>();
 
   ngOnInit(): void {}
 
@@ -28,14 +28,14 @@ export class AppointmentsList implements OnInit {
   }
 
   // Save the attendance in database
-  saveAttendance(updatedAttendance: AppointmentModel) {
-    // Model the updated appointment
+  saveAttendance(updatedAppointmentAttendance: AppointmentAttendance) {
+    // Model the updated member attendance
     const subscription = this.appointmentService
-      .updateAttendance(updatedAttendance)
+      .updateAppointmentAttendance(updatedAppointmentAttendance)
       .subscribe({
         next: () => {
           // Popup
-          this.snackBar.open('Appointment saved.', 'close', {
+          this.snackBar.open('Attendance saved.', 'close', {
             duration: 3000,
           });
         },

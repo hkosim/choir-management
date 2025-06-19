@@ -7,6 +7,7 @@ import com.hk.personal.choir_management.dto.appointment.AppointmentAttendanceReq
 import com.hk.personal.choir_management.dto.attendance.MemberAttendanceDto;
 import com.hk.personal.choir_management.dto.member.*;
 import com.hk.personal.choir_management.entity.Member;
+import com.hk.personal.choir_management.entity.Performance;
 import com.hk.personal.choir_management.entity.Rehearsal;
 import com.hk.personal.choir_management.entity.Song;
 import org.springframework.data.domain.Page;
@@ -33,4 +34,5 @@ public interface ChoirManagementBusinessService {
     AppointmentAttendanceDto updateAppointment(AppointmentAttendanceRequestDto appointmentAttendanceRequestDto);
 
     Rehearsal saveRehearsal(Rehearsal rehearsal);
+    Performance savePerformance(Performance performance);
 }

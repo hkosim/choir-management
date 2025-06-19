@@ -10,17 +10,19 @@ export const routes: Routes = [
   {
     path: '',
     component: Home,
-    // canActivate: guards or something
+    title: 'Choir Management App',
   },
   {
     path: 'auth',
     component: Auth,
     children: authRoutes,
+    title: 'Choir Management App',
   },
   {
     path: 'dashboard',
     component: Dashboard,
     children: dashboardRoutes,
     canActivate: [AuthGuard],
+    title: 'Dashboard - CMA',
   },
 ];

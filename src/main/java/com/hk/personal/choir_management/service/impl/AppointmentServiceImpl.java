@@ -225,4 +225,16 @@ public class AppointmentServiceImpl implements AppointmentService {
     public Rehearsal saveRehearsal(Rehearsal rehearsal) {
         return rehearsalRepository.save(rehearsal);
     }
+
+
+    /**
+     * Save updated performance.
+     *
+     * @param performance updated object.
+     * @return the updated performance.
+     */
+    @Override
+    public Performance savePerformance(Performance performance) {
+        return performanceRepository.save(performance);
+    }
 }

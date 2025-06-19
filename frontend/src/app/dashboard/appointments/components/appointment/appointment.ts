@@ -6,7 +6,6 @@ import {
   OnInit,
   output,
 } from '@angular/core';
-import { Appointment as AppointmentModel } from '../../model/appointment.model';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,8 +16,8 @@ import {
 import { FormsModule } from '@angular/forms';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
-import { AppointmentService } from '../../service/appointment.service';
 import { AuthService } from '../../../../auth/auth.service';
+import { AppointmentAttendance } from '../../model/appointment-attendance.model';
 
 @Component({
   selector: 'app-appointment',
@@ -35,7 +34,7 @@ import { AuthService } from '../../../../auth/auth.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Appointment implements OnInit {
-  appointment = input.required<AppointmentModel>();
+  appointmentAttendance = input.required<AppointmentAttendance>();
   attendance!: boolean;
 
   private authService = inject(AuthService);
@@ -43,10 +42,10 @@ export class Appointment implements OnInit {
 
   userRole: 'user' | 'admin' = 'user';
 
-  attendanceChanged = output<AppointmentModel>();
+  attendanceChanged = output<AppointmentAttendance>();
 
   ngOnInit(): void {
-    this.attendance = this.appointment().present;
+    this.attendance = this.appointmentAttendance().present;
     this.userRole = this.authService.roles.includes('ROLE_ADMIN')
       ? 'admin'
       : 'user';
@@ -54,8 +53,8 @@ export class Appointment implements OnInit {
 
   // Emits the value of new attendance
   onAttendanceChange(event: MatButtonToggleChange) {
-    const updatedAppointment: AppointmentModel = {
-      ...this.appointment(),
+    const updatedAppointment: AppointmentAttendance = {
+      ...this.appointmentAttendance(),
       present: event.value,
     };
     this.attendanceChanged.emit(updatedAppointment);
