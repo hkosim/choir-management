@@ -18,6 +18,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../auth/auth.service';
 import { AppointmentAttendance } from '../../model/appointment-attendance.model';
+import { AppointmentType } from '../../model/appointment-type.model';
 
 @Component({
   selector: 'app-appointment',
@@ -28,6 +29,7 @@ import { AppointmentAttendance } from '../../model/appointment-attendance.model'
     MatButtonToggleModule,
     FormsModule,
     MatTooltipModule,
+    
   ],
   templateUrl: './appointment.html',
   styleUrl: './appointment.scss',
@@ -36,6 +38,8 @@ import { AppointmentAttendance } from '../../model/appointment-attendance.model'
 export class Appointment implements OnInit {
   appointmentAttendance = input.required<AppointmentAttendance>();
   attendance!: boolean;
+
+  AppointmentType = AppointmentType;
 
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -60,7 +64,13 @@ export class Appointment implements OnInit {
     this.attendanceChanged.emit(updatedAppointment);
   }
 
-  navigateTo(route: string, type: 'rehearsal' | 'performance', id: number) {
-    this.router.navigate(['dashboard', 'appointments', route, type, id]);
+  navigateTo(route: string, type: AppointmentType, id: number) {
+    this.router.navigate([
+      'dashboard',
+      'appointments',
+      route,
+      type.toString().toLowerCase(),
+      id,
+    ]);
   }
 }

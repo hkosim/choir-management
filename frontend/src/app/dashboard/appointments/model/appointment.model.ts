@@ -1,6 +1,8 @@
+import { AppointmentType } from "./appointment-type.model";
+
 export interface Appointment {
   id: number;
-  type: 'rehearsal' | 'performance'; // String union for stricter typing
+  type: AppointmentType
   title: string;
   description: string;
   date: string; // ISO format e.g. "2025-06-17"

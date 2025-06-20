@@ -4,6 +4,7 @@ import { resolveAppointmentAttendancePage } from './resolver/appointment-attenda
 import { EditAppointment } from './components/edit-appointment/edit-appointment';
 import { AdminGuard } from '../../auth/guards/admin.guard';
 import { resolveAppointment } from './resolver/appointment.resolver';
+import { AddAppointment } from './components/add-appointment/add-appointment';
 
 export const appointmentRoutes: Routes = [
   {
@@ -14,6 +15,13 @@ export const appointmentRoutes: Routes = [
     resolve: {
       appointmentAttendancePage: resolveAppointmentAttendancePage,
     },
+  },
+  {
+    path: 'add',
+    title: 'Add new Appointment - CMA',
+    component: AddAppointment,
+    runGuardsAndResolvers: 'always',
+    canActivate: [AdminGuard],
   },
   {
     path: 'edit/:type/:id',

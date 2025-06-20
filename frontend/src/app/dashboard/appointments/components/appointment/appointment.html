@@ -30,7 +30,7 @@
     <mat-card-title>
       <!-- ICONS -->
       <span>
-        @if (appointmentAttendance().type==="rehearsal") {
+        @if (appointmentAttendance().type === AppointmentType.REHEARSAL) {
         <mat-icon matTooltip="Rehearsal" matTooltipPosition="before">
           music_note
         </mat-icon>

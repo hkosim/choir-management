@@ -2,14 +2,22 @@
   <!-- TODO: APPOINTMENT CARDS -->
   <h2 class="mb-3">Appointments</h2>
   <!-- Paginator (up) -->
-  <mat-paginator
-    [length]="appointmentAttendancePage().page.totalElements"
-    [pageSize]="appointmentAttendancePage().page.size"
-    [pageSizeOptions]="[5, 10]"
-    aria-label="Select page"
-    (page)="onChangePage()"
-  >
-  </mat-paginator>
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <button mat-raised-button (click)="navigateTo('add')">
+        <mat-icon title="Add new"> add </mat-icon>
+        Add new appointment
+      </button>
+      <mat-paginator
+        [length]="appointmentAttendancePage().page.totalElements"
+        [pageSize]="appointmentAttendancePage().page.size"
+        [pageSizeOptions]="[5, 10]"
+        aria-label="Select page"
+        (page)="onChangePage()"
+      >
+      </mat-paginator>
+    </mat-toolbar-row>
+  </mat-toolbar>
 
   <!-- Appointments -->
   @for (appointment of appointmentAttendancePage().content; track $index) {

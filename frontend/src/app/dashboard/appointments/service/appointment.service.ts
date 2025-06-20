@@ -12,6 +12,7 @@ import { AppointmentAttendanceUpdateRequest } from '../model/appointment-attenda
 import { Performance } from '../model/performance.model';
 import { Rehearsal } from '../model/rehearsal.model';
 import { AppointmentAttendance } from '../model/appointment-attendance.model';
+import { AppointmentType } from '../model/appointment-type.model';
 
 /**
  * Service for user-related API operations.
@@ -91,7 +92,7 @@ export class AppointmentService {
    * @returns An observable of the Appointment.
    */
   public getAppointment(
-    type: 'rehearsal' | 'performance',
+    type: AppointmentType,
     id: string
   ): Observable<Rehearsal | Performance> {
     // TODO: Interceptor
@@ -112,7 +113,7 @@ export class AppointmentService {
    * @params appointment the updated appointment.
    * @returns An observable of the new Appointment.
    */
-  public updateAppointment(
+  public saveAppointment(
     appointment: Rehearsal | Performance
   ): Observable<Rehearsal | Performance> {
     // TODO: Interceptor
@@ -125,7 +126,9 @@ export class AppointmentService {
     return this.httpClient
       .post<Rehearsal | Performance>(url, appointmentRequest, { headers })
       .pipe(
-        tap((appointment: Rehearsal | Performance) => {}),
+        tap((appointment: Rehearsal | Performance) => {
+          console.log(appointment);
+        }),
         catchError((error: HttpErrorResponse) => throwError(() => error.error))
       );
   }

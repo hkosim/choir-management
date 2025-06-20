@@ -33,6 +33,7 @@ import {
   formatDateToIso,
   formatTimeToIso,
 } from '../../../../shared/utils/utils';
+import { AppointmentType } from '../../model/appointment-type.model';
 
 @Component({
   selector: 'app-edit-appointment',
@@ -86,7 +87,7 @@ export class EditAppointment implements OnInit {
     });
 
     // Add songs if it is an performance
-    if (this.appointment().type === 'performance') {
+    if (this.appointment().type === AppointmentType.PERFORMANCE) {
       // Creates the form group inside the songs
       this.appointmentForm.addControl('songs', new FormArray([]));
 
@@ -137,7 +138,7 @@ export class EditAppointment implements OnInit {
     console.log(updatedAppointment);
 
     // Submit the appointment to the
-    if (this.appointment().type === 'performance') {
+    if (this.appointment().type === AppointmentType.PERFORMANCE) {
       updatedAppointment = {
         ...updatedAppointment,
         songs: this.appointmentForm.value.songs,
@@ -145,7 +146,7 @@ export class EditAppointment implements OnInit {
     }
 
     const subscription = this.appointmentService
-      .updateAppointment(updatedAppointment)
+      .saveAppointment(updatedAppointment)
       .subscribe({
         next: () => {
           // Go back to dashboard/appointments/list
