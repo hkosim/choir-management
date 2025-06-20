@@ -1,15 +1,13 @@
 package com.hk.personal.choir_management.business.service;
 
 
-import com.hk.personal.choir_management.dto.AppointmentView;
-import com.hk.personal.choir_management.dto.appointment.AppointmentAttendanceDto;
-import com.hk.personal.choir_management.dto.appointment.AppointmentAttendanceRequestDto;
-import com.hk.personal.choir_management.dto.attendance.MemberAttendanceDto;
-import com.hk.personal.choir_management.dto.member.*;
-import com.hk.personal.choir_management.entity.Member;
-import com.hk.personal.choir_management.entity.Performance;
-import com.hk.personal.choir_management.entity.Rehearsal;
-import com.hk.personal.choir_management.entity.Song;
+import com.hk.personal.choir_management.model.dto.AppointmentView;
+import com.hk.personal.choir_management.model.dto.appointment.AppointmentAttendanceDto;
+import com.hk.personal.choir_management.model.dto.appointment.AppointmentAttendanceRequestDto;
+import com.hk.personal.choir_management.model.dto.attendance.MemberAttendanceDto;
+import com.hk.personal.choir_management.model.dto.member.*;
+import com.hk.personal.choir_management.model.entity.*;
+import com.hk.personal.choir_management.model.enums.AppointmentType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -29,10 +27,10 @@ public interface ChoirManagementBusinessService {
     Page<Song> getSongs(Pageable pageable);
 
     // APPOINTMENTS
-    Page<AppointmentAttendanceDto> getAppointments(String username, Pageable pageable);
-    AppointmentView getAppointment(String type, Long id);
-    AppointmentAttendanceDto updateAppointment(AppointmentAttendanceRequestDto appointmentAttendanceRequestDto);
+    Page<AppointmentAttendanceDto> getMemberAttendances(String username, Pageable pageable);
+    Appointment getAppointment(Long id);
+    Appointment saveAppointment(Appointment appointment);
+    AppointmentAttendanceDto updateAttendance(AppointmentAttendanceRequestDto appointmentAttendanceRequestDto);
 
-    Rehearsal saveRehearsal(Rehearsal rehearsal);
-    Performance savePerformance(Performance performance);
+
 }

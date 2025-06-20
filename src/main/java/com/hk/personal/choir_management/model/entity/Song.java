@@ -1,4 +1,4 @@
-package com.hk.personal.choir_management.entity;
+package com.hk.personal.choir_management.model.entity;
 
 import jakarta.persistence.*;
 

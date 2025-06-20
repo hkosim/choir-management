@@ -1,4 +1,4 @@
-package com.hk.personal.choir_management.entity.composite;
+package com.hk.personal.choir_management.model.entity.composite;
 
 import jakarta.persistence.Embeddable;
 

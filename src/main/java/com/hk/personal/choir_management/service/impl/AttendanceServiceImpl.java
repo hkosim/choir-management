@@ -1,9 +1,8 @@
 package com.hk.personal.choir_management.service.impl;
 
-import com.hk.personal.choir_management.dto.attendance.AttendanceDto;
-import com.hk.personal.choir_management.dto.attendance.MemberAttendanceDto;
-import com.hk.personal.choir_management.repository.PerformanceAttendanceRepository;
-import com.hk.personal.choir_management.repository.RehearsalAttendanceRepository;
+import com.hk.personal.choir_management.model.dto.attendance.MemberAttendanceDto;
+import com.hk.personal.choir_management.model.entity.AppointmentAttendance;
+import com.hk.personal.choir_management.repository.AppointmentAttendanceRepository;
 import com.hk.personal.choir_management.repository.MemberRepository;
 import com.hk.personal.choir_management.service.AttendanceService;
 import org.springframework.stereotype.Service;
@@ -17,15 +16,14 @@ import java.util.stream.Collectors;
 @Service
 public class AttendanceServiceImpl implements AttendanceService {
 
-    private final RehearsalAttendanceRepository rehearsalAttendanceRepository;
-    private final PerformanceAttendanceRepository performanceAttendanceRepository;
+    private final AppointmentAttendanceRepository appointmentAttendanceRepository;
     private final MemberRepository memberRepository;
 
-    public AttendanceServiceImpl(RehearsalAttendanceRepository rehearsalAttendanceRepository, PerformanceAttendanceRepository performanceAttendanceRepository, MemberRepository memberRepository) {
-        this.rehearsalAttendanceRepository = rehearsalAttendanceRepository;
-        this.performanceAttendanceRepository = performanceAttendanceRepository;
+    public AttendanceServiceImpl(AppointmentAttendanceRepository appointmentAttendanceRepository, MemberRepository memberRepository) {
+        this.appointmentAttendanceRepository = appointmentAttendanceRepository;
         this.memberRepository = memberRepository;
     }
+
 
     /**
      * Returns all appointments with attendance status for a given user.
@@ -36,21 +34,17 @@ public class AttendanceServiceImpl implements AttendanceService {
     public List<MemberAttendanceDto> findAllGroupedByMembers() {
         return memberRepository.findAll().stream()
                 .map(member -> {
-                    List<AttendanceDto> attendances =
-                            rehearsalAttendanceRepository.findByMemberUsername(member.getUsername())
-                                .stream()
-                                .map(att -> new AttendanceDto(att.getRehearsal().getDate(), att.isPresent()))
-                                .collect(Collectors.toList());
+                    List<AppointmentAttendance> appointmentAttendances =
+                            appointmentAttendanceRepository.findByMemberUsername(member.getUsername());
 
                     return new MemberAttendanceDto(
                             member.getUsername(),
                             member.getName(),
                             member.getVoicePart(),
-                            attendances
+                            appointmentAttendances
                     );
                 })
                 .collect(Collectors.toList());
     }
-
 
 }

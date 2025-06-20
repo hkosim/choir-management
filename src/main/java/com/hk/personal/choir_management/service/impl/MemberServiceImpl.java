@@ -1,14 +1,12 @@
 package com.hk.personal.choir_management.service.impl;
 
-import com.hk.personal.choir_management.dto.member.LoginRequest;
-import com.hk.personal.choir_management.dto.member.LoginResponse;
-import com.hk.personal.choir_management.dto.member.RegisterRequest;
-import com.hk.personal.choir_management.entity.Authority;
-import com.hk.personal.choir_management.entity.Member;
+import com.hk.personal.choir_management.model.dto.member.LoginRequest;
+import com.hk.personal.choir_management.model.dto.member.RegisterRequest;
+import com.hk.personal.choir_management.model.entity.Authority;
+import com.hk.personal.choir_management.model.entity.Member;
 import com.hk.personal.choir_management.repository.MemberRepository;
 import com.hk.personal.choir_management.service.MemberService;
 import jakarta.persistence.EntityNotFoundException;
-import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.BadCredentialsException;

@@ -1,11 +1,13 @@
-package com.hk.personal.choir_management.dto;
+package com.hk.personal.choir_management.model.dto;
+
+import com.hk.personal.choir_management.model.enums.AppointmentType;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public interface AppointmentView {
     Long id();
-    String type();
+    AppointmentType type();
     String title();
     String description();
     LocalDate date();

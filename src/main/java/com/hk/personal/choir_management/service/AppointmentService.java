@@ -1,9 +1,8 @@
 package com.hk.personal.choir_management.service;
 
-import com.hk.personal.choir_management.dto.AppointmentView;
-import com.hk.personal.choir_management.dto.appointment.AppointmentAttendanceDto;
-import com.hk.personal.choir_management.entity.Performance;
-import com.hk.personal.choir_management.entity.Rehearsal;
+import com.hk.personal.choir_management.model.dto.appointment.AppointmentAttendanceDto;
+import com.hk.personal.choir_management.model.entity.Appointment;
+import com.hk.personal.choir_management.model.enums.AttendanceStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -15,15 +14,11 @@ public interface AppointmentService {
             LocalDate date,
             Pageable pageable);
 
-    AppointmentAttendanceDto saveAttendance(
-            String username,
-            Long id,
-            String type,
-            Boolean present
-    );
+    Appointment findAppointmentById(Long id);
 
-    AppointmentView findAppointmentByType(String type, Long id);
 
-    Rehearsal saveRehearsal(Rehearsal rehearsal);
-    Performance savePerformance(Performance performance);
+    Appointment addAppointment(Appointment appointment);
+    Appointment saveAppointment(Appointment appointment);
+
+    AppointmentAttendanceDto saveAttendance(String username, Long id, AttendanceStatus attendanceStatus);
 }
