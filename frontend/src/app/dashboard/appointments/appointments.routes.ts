@@ -24,7 +24,7 @@ export const appointmentRoutes: Routes = [
     canActivate: [AdminGuard],
   },
   {
-    path: 'edit/:type/:id',
+    path: 'edit/:id',
     title: 'Edit - CMA',
     component: EditAppointment,
     runGuardsAndResolvers: 'always',

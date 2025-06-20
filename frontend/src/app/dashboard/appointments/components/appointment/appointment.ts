@@ -5,6 +5,8 @@ import {
   input,
   OnInit,
   output,
+  signal,
+  WritableSignal,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,7 +20,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../auth/auth.service';
 import { AppointmentAttendance } from '../../model/appointment-attendance.model';
-import { AppointmentType } from '../../model/appointment-type.model';
+import { Appointment as AppointmentModel } from '../../model/appointment.model';
+import { AppointmentType } from '../../enum/appointment-type.enum';
+import { AttendanceStatus } from '../../enum/attendance-status.enum';
 
 @Component({
   selector: 'app-appointment',
@@ -29,17 +33,19 @@ import { AppointmentType } from '../../model/appointment-type.model';
     MatButtonToggleModule,
     FormsModule,
     MatTooltipModule,
-    
   ],
   templateUrl: './appointment.html',
   styleUrl: './appointment.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Appointment implements OnInit {
-  appointmentAttendance = input.required<AppointmentAttendance>();
-  attendance!: boolean;
+  appointmentAttendance = input.required<AttendanceStatus>();
+  appointment = input.required<AppointmentModel>();
+
+  attendance!: AttendanceStatus;
 
   AppointmentType = AppointmentType;
+  AttendanceStatus = AttendanceStatus;
 
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -49,7 +55,7 @@ export class Appointment implements OnInit {
   attendanceChanged = output<AppointmentAttendance>();
 
   ngOnInit(): void {
-    this.attendance = this.appointmentAttendance().present;
+    this.attendance = this.appointmentAttendance();
     this.userRole = this.authService.roles.includes('ROLE_ADMIN')
       ? 'admin'
       : 'user';
@@ -58,18 +64,17 @@ export class Appointment implements OnInit {
   // Emits the value of new attendance
   onAttendanceChange(event: MatButtonToggleChange) {
     const updatedAppointment: AppointmentAttendance = {
-      ...this.appointmentAttendance(),
-      present: event.value,
+      appointment: this.appointment(),
+      attendanceStatus: event.value,
     };
     this.attendanceChanged.emit(updatedAppointment);
   }
 
-  navigateTo(route: string, type: AppointmentType, id: number) {
+  navigateTo(route: string, id: number) {
     this.router.navigate([
       'dashboard',
       'appointments',
       route,
-      type.toString().toLowerCase(),
       id,
     ]);
   }

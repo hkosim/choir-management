@@ -6,8 +6,6 @@ import {
   OnInit,
   Signal,
 } from '@angular/core';
-import { Rehearsal } from '../../model/rehearsal.model';
-import { Performance } from '../../model/performance.model';
 import { MatCardModule } from '@angular/material/card';
 import {
   FormArray,
@@ -20,7 +18,6 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatIconModule } from '@angular/material/icon';
-import { Song } from '../../model/song.model';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -33,7 +30,7 @@ import {
   formatDateToIso,
   formatTimeToIso,
 } from '../../../../shared/utils/utils';
-import { AppointmentType } from '../../model/appointment-type.model';
+import { Appointment } from '../../model/appointment.model';
 
 @Component({
   selector: 'app-edit-appointment',
@@ -55,9 +52,7 @@ import { AppointmentType } from '../../model/appointment-type.model';
   styleUrl: './edit-appointment.scss',
 })
 export class EditAppointment implements OnInit {
-  appointment: Signal<Rehearsal | Performance> = input.required<
-    Rehearsal | Performance
-  >();
+  appointment: Signal<Appointment> = input.required<Appointment>();
 
   private router = inject(Router);
   private formBuilder = inject(FormBuilder);
@@ -78,33 +73,14 @@ export class EditAppointment implements OnInit {
 
     this.appointmentForm = this.formBuilder.group({
       id: [this.appointment().id],
-      type: [this.appointment().type],
+      appointmentType: [this.appointment().appointmentType],
       title: [this.appointment().title, Validators.required],
       description: [this.appointment().description],
       date: [this.appointment().date, Validators.required],
       time: [initialTime, Validators.required],
       location: [this.appointment().location],
+      songs: [this.appointment().songs],
     });
-
-    // Add songs if it is an performance
-    if (this.appointment().type === AppointmentType.PERFORMANCE) {
-      // Creates the form group inside the songs
-      this.appointmentForm.addControl('songs', new FormArray([]));
-
-      const performance: Performance = this.appointment() as Performance;
-
-      performance.songs?.forEach((song: Song) => {
-        this.songs.push(
-          this.formBuilder.group({
-            title: [song.title, Validators.required],
-            composer: [song.composer],
-            musicalKey: [song.musicalKey],
-            voiceArrangement: [song.voiceArrangement],
-            source: [song.source],
-          })
-        );
-      });
-    }
   }
 
   get songs(): FormArray {
@@ -126,24 +102,17 @@ export class EditAppointment implements OnInit {
       return;
     }
 
-    let updatedAppointment: Rehearsal | Performance = {
+    let updatedAppointment: Appointment = { 
+      ...this.appointment(),
       id: this.appointment().id,
-      type: this.appointment().type,
+      appointmentType: this.appointmentForm.value.appointmentType!,
       title: this.appointmentForm.value.title!,
       description: this.appointmentForm.value.description!,
       date: formatDateToIso(this.appointmentForm.value.date)!,
       time: formatTimeToIso(this.appointmentForm.value.time)!,
       location: this.appointmentForm.value.location,
+      songs: this.appointmentForm.value.songs,
     };
-    console.log(updatedAppointment);
-
-    // Submit the appointment to the
-    if (this.appointment().type === AppointmentType.PERFORMANCE) {
-      updatedAppointment = {
-        ...updatedAppointment,
-        songs: this.appointmentForm.value.songs,
-      };
-    }
 
     const subscription = this.appointmentService
       .saveAppointment(updatedAppointment)

@@ -2,13 +2,13 @@
   <!-- Date and time -->
   <div class="card-header-row pt-1 ps-3 pe-3">
     <span class="title-text"
-      >{{appointmentAttendance().date}} {{appointmentAttendance().time}}</span
+      >{{appointment().date}} {{appointment().time}}</span
     >
     <div class="action-icons">
       <button
         mat-icon-button
         aria-label="Code"
-        (click)="navigateTo('view', appointmentAttendance().type, appointmentAttendance().id)"
+        (click)="navigateTo('view', appointment().id)"
       >
         <mat-icon>open_in_new</mat-icon>
       </button>
@@ -16,7 +16,7 @@
       @if (userRole === 'admin') {<button
         mat-icon-button
         aria-label="Code"
-        (click)="navigateTo('edit', appointmentAttendance().type, appointmentAttendance().id)"
+        (click)="navigateTo('edit', appointment().id)"
       >
         <mat-icon>edit</mat-icon>
       </button>
@@ -26,11 +26,11 @@
     </div>
   </div>
 
+  <!-- ICONS -->
   <mat-card-header>
     <mat-card-title>
-      <!-- ICONS -->
       <span>
-        @if (appointmentAttendance().type === AppointmentType.REHEARSAL) {
+        @if (appointment().appointmentType === AppointmentType.REHEARSAL) {
         <mat-icon matTooltip="Rehearsal" matTooltipPosition="before">
           music_note
         </mat-icon>
@@ -40,11 +40,11 @@
         </mat-icon>
         }
       </span>
-      <span class="pb-2"> {{appointmentAttendance().title}} </span>
+      <span class="pb-2"> {{appointment().title}} </span>
     </mat-card-title>
 
     <mat-card-subtitle class="mt-2">
-      {{appointmentAttendance().description}}
+      {{appointment().description}}
     </mat-card-subtitle>
   </mat-card-header>
 
@@ -55,10 +55,13 @@
       aria-label="Attendance"
       hideSingleSelectionIndicator="true"
     >
-      <mat-button-toggle [value]="false" class="no-button">
+      <mat-button-toggle [value]="AttendanceStatus.ABSENT" class="no-button">
         <mat-icon>clear</mat-icon>
       </mat-button-toggle>
-      <mat-button-toggle [value]="true" class="yes-button">
+      <mat-button-toggle [value]="AttendanceStatus.MAYBE" class="maybe-button">
+        <mat-icon>question_mark</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle [value]="AttendanceStatus.PRESENT" class="yes-button">
         <mat-icon>check</mat-icon>
       </mat-button-toggle>
     </mat-button-toggle-group>

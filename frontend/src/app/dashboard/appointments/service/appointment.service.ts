@@ -9,10 +9,7 @@ import { AppointmentAttendancePage } from '../model/appointment-attendance-page.
 import { environment } from '../../../../environments/environment';
 import { Appointment } from '../model/appointment.model';
 import { AppointmentAttendanceUpdateRequest } from '../model/appointment-attendance-update-request.model';
-import { Performance } from '../model/performance.model';
-import { Rehearsal } from '../model/rehearsal.model';
 import { AppointmentAttendance } from '../model/appointment-attendance.model';
-import { AppointmentType } from '../model/appointment-type.model';
 
 /**
  * Service for user-related API operations.
@@ -66,15 +63,18 @@ export class AppointmentService {
 
     const attendanceUpdateRequest: AppointmentAttendanceUpdateRequest = {
       username: username!,
-      id: updatedAttendance.id,
-      type: updatedAttendance.type,
-      present: updatedAttendance.present,
+      id: updatedAttendance.appointment.id,
+      attendanceStatus: updatedAttendance.attendanceStatus,
     };
-
+    console.log(attendanceUpdateRequest);
     return this.httpClient
-      .post<Appointment>(this.apiUrl + '/save', attendanceUpdateRequest, {
-        headers: new HttpHeaders().set('Authorization', 'Basic ' + token),
-      })
+      .post<Appointment>(
+        this.apiUrl + '/attendance/save',
+        attendanceUpdateRequest,
+        {
+          headers: new HttpHeaders().set('Authorization', 'Basic ' + token),
+        }
+      )
       .pipe(
         tap({
           next: () => {},
@@ -87,22 +87,18 @@ export class AppointmentService {
 
   /**
    * Fetch an appointment
-   * @params type of the appointment
    * @params id of the appointment
    * @returns An observable of the Appointment.
    */
-  public getAppointment(
-    type: AppointmentType,
-    id: string
-  ): Observable<Rehearsal | Performance> {
+  public getAppointment(id: string): Observable<Appointment> {
     // TODO: Interceptor
     const token = sessionStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', 'Basic ' + token!);
 
-    const url = `${this.apiUrl}/appointment/${type.toLowerCase()}/${id}`;
+    const url = `${this.apiUrl}/appointment/${id}`;
 
     return this.httpClient
-      .get<Rehearsal | Performance>(url, { headers })
+      .get<Appointment>(url, { headers })
       .pipe(
         catchError((error: HttpErrorResponse) => throwError(() => error.error))
       );
@@ -113,20 +109,17 @@ export class AppointmentService {
    * @params appointment the updated appointment.
    * @returns An observable of the new Appointment.
    */
-  public saveAppointment(
-    appointment: Rehearsal | Performance
-  ): Observable<Rehearsal | Performance> {
+  public saveAppointment(appointment: Appointment): Observable<Appointment> {
     // TODO: Interceptor
     const token = sessionStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', 'Basic ' + token!);
 
-    const { type, ...appointmentRequest } = appointment;
-    const url = `${this.apiUrl}/${type.toLowerCase()}/save`;
+    const url = `${this.apiUrl}/save`;
 
     return this.httpClient
-      .post<Rehearsal | Performance>(url, appointmentRequest, { headers })
+      .post<Appointment>(url, appointment, { headers })
       .pipe(
-        tap((appointment: Rehearsal | Performance) => {
+        tap((appointment: Appointment) => {
           console.log(appointment);
         }),
         catchError((error: HttpErrorResponse) => throwError(() => error.error))

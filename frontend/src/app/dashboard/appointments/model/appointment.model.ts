@@ -1,11 +1,19 @@
-import { AppointmentType } from "./appointment-type.model";
+import { Song } from '../components/song/song';
+import { AppointmentType } from '../enum/appointment-type.enum';
 
 export interface Appointment {
   id: number;
-  type: AppointmentType
   title: string;
   description: string;
-  date: string; // ISO format e.g. "2025-06-17"
-  time: string; // ISO time e.g. "14:30:00"
+  date: string;
+  time: string;
   location: string;
+  appointmentType: AppointmentType;
+  songs: Array<Song> | undefined;
+
+  createdBy: string;
+  createdAt: string;
+  lastModifiedBy: string;
+  lastModifiedAt: string;
+  deletedAt: string;
 }

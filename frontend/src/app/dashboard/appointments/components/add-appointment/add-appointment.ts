@@ -18,8 +18,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { Song } from '../song/song';
 import { Router } from '@angular/router';
-import { Rehearsal } from '../../model/rehearsal.model';
-import { Performance } from '../../model/performance.model';
 import {
   formatDateToIso,
   formatTimeToIso,
@@ -27,7 +25,8 @@ import {
 import { AppointmentService } from '../../service/appointment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
-import { AppointmentType } from '../../model/appointment-type.model';
+import { AppointmentType } from '../../enum/appointment-type.enum';
+import { Appointment } from '../../model/appointment.model';
 
 @Component({
   selector: 'app-add-appointment',
@@ -57,6 +56,8 @@ export class AddAppointment {
 
   appointmentTypes: Array<string> = Object.values(AppointmentType);
 
+  initDate: Date = new Date(new Date().setHours(18, 0, 0, 0));
+
   appointmentForm: FormGroup = new FormGroup({
     type: new FormControl<AppointmentType>(
       AppointmentType.REHEARSAL,
@@ -64,8 +65,8 @@ export class AddAppointment {
     ),
     title: new FormControl<string>('', Validators.required),
     description: new FormControl<string>(''),
-    date: new FormControl<Date>(new Date(), Validators.required),
-    time: new FormControl<Date>(new Date(), Validators.required),
+    date: new FormControl<Date>(this.initDate, Validators.required),
+    time: new FormControl<Date>(this.initDate, Validators.required),
     location: new FormControl<string>('', Validators.required),
     songs: new FormControl<Array<Song>>([]),
   });
@@ -84,24 +85,23 @@ export class AddAppointment {
       return;
     }
 
-    let newAppointment: Rehearsal | Performance = {
+    const newAppointment: Appointment = {
       id: 0,
-      type: this.appointmentForm.value.type,
+      appointmentType: this.appointmentForm.value.type as AppointmentType,
       title: this.appointmentForm.value.title!,
       description: this.appointmentForm.value.description!,
       date: formatDateToIso(this.appointmentForm.value.date)!,
       time: formatTimeToIso(this.appointmentForm.value.time)!,
       location: this.appointmentForm.value.location,
+      songs: [],
+
+      createdBy: '',
+      createdAt: '',
+      lastModifiedBy: '',
+      lastModifiedAt: '',
+      deletedAt: '',
     };
-
-    // Submit the appointment to the
-    if (this.appointmentForm.value.type === AppointmentType.PERFORMANCE) {
-      newAppointment = {
-        ...newAppointment,
-        songs: this.appointmentForm.value.songs,
-      };
-    }
-
+    console.log(newAppointment);
     const subscription = this.appointmentService
       .saveAppointment(newAppointment)
       .subscribe({

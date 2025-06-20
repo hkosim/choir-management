@@ -8,6 +8,14 @@
   );
 }
 
+.maybe-button {
+  @include mat.button-toggle-overrides(
+    (
+      selected-state-background-color: rgb(254, 255, 182),
+    )
+  );
+}
+
 .yes-button {
   @include mat.button-toggle-overrides(
     (

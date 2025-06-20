@@ -20,9 +20,10 @@
   </mat-toolbar>
 
   <!-- Appointments -->
-  @for (appointment of appointmentAttendancePage().content; track $index) {
+  @for (appointmentAttendance of appointmentAttendancePage().content; track $index) {
   <app-appointment
-    [appointmentAttendance]="appointment"
+    [appointmentAttendance]="appointmentAttendance.attendanceStatus"
+    [appointment]="appointmentAttendance.appointment"
     (attendanceChanged)="saveAttendance($event)"
   />
 
