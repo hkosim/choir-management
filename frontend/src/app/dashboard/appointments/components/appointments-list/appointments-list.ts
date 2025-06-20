@@ -5,10 +5,20 @@ import { AppointmentService } from '../../service/appointment.service';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { Appointment } from '../appointment/appointment';
 import { AppointmentAttendance } from '../../model/appointment-attendance.model';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-appointments-list',
-  imports: [MatPaginatorModule, Appointment],
+  imports: [
+    MatPaginatorModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    Appointment,
+  ],
   templateUrl: './appointments-list.html',
   styleUrl: './appointments-list.scss',
 })
@@ -16,6 +26,7 @@ export class AppointmentsList implements OnInit {
   private appointmentService = inject(AppointmentService);
   private destroyRef = inject(DestroyRef);
   private snackBar = inject(MatSnackBar);
+  private router = inject(Router);
 
   appointmentAttendancePage = input.required<AppointmentAttendancePage>();
 
@@ -45,6 +56,11 @@ export class AppointmentsList implements OnInit {
       });
 
     this.destroyRef.onDestroy(() => subscription.unsubscribe());
+  }
+
+  // Navigation
+  navigateTo(route: string) {
+    this.router.navigate(['dashboard', 'appointments', route]);
   }
 
   submit() {
