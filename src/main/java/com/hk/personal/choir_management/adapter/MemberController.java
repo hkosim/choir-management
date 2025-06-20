@@ -1,9 +1,9 @@
 package com.hk.personal.choir_management.adapter;
 
 import com.hk.personal.choir_management.business.service.ChoirManagementBusinessService;
-import com.hk.personal.choir_management.dto.attendance.MemberAttendanceDto;
-import com.hk.personal.choir_management.dto.member.*;
-import com.hk.personal.choir_management.entity.Member;
+import com.hk.personal.choir_management.model.dto.attendance.MemberAttendanceDto;
+import com.hk.personal.choir_management.model.dto.member.*;
+import com.hk.personal.choir_management.model.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;

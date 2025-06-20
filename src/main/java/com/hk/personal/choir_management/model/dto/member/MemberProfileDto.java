@@ -1,4 +1,4 @@
-package com.hk.personal.choir_management.dto.member;
+package com.hk.personal.choir_management.model.dto.member;
 
 import java.time.LocalDate;
 

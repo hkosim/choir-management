@@ -1,6 +1,6 @@
 package com.hk.personal.choir_management.service.impl;
 
-import com.hk.personal.choir_management.entity.Song;
+import com.hk.personal.choir_management.model.entity.Song;
 import com.hk.personal.choir_management.repository.SongRepository;
 import com.hk.personal.choir_management.service.SongService;
 import org.springframework.data.domain.Page;

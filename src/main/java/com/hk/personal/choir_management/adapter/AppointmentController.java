@@ -1,11 +1,9 @@
 package com.hk.personal.choir_management.adapter;
 
 import com.hk.personal.choir_management.business.service.ChoirManagementBusinessService;
-import com.hk.personal.choir_management.dto.AppointmentView;
-import com.hk.personal.choir_management.dto.appointment.AppointmentAttendanceDto;
-import com.hk.personal.choir_management.dto.appointment.AppointmentAttendanceRequestDto;
-import com.hk.personal.choir_management.entity.Performance;
-import com.hk.personal.choir_management.entity.Rehearsal;
+import com.hk.personal.choir_management.model.dto.appointment.AppointmentAttendanceDto;
+import com.hk.personal.choir_management.model.dto.appointment.AppointmentAttendanceRequestDto;
+import com.hk.personal.choir_management.model.entity.Appointment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -33,72 +31,56 @@ public class AppointmentController {
     @GetMapping(value = "/attendances")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("isAuthenticated()")
-    public Page<AppointmentAttendanceDto> getAppointments(
+    public Page<AppointmentAttendanceDto> getMemberAttendances(
             @PageableDefault(sort = "id") Pageable pageable,
             @RequestParam(value = "username") String username
     ) {
-        return choirManagementBusinessService.getAppointments(username, pageable);
+        return choirManagementBusinessService.getMemberAttendances(username, pageable);
     }
 
     /**
-     * Returns an appointment given a type and id of the appointment.
+     * Returns an appointment given the id of the appointment.
      *
-     * @param type the type of appointment.
-     * @param id   the id of rehearsal or performance
-     * @return a rehearsal oder performance.
+     * @param id the id of appointment
+     * @return an appointment
      */
-    @GetMapping(value = "appointment/{type}/{id}")
+    @GetMapping(value = "/appointment/{id}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("isAuthenticated()")
-    public AppointmentView getAppointment(
-            @PathVariable String type,
+    public Appointment getAppointment(
             @PathVariable Long id
     ) {
-        return choirManagementBusinessService.getAppointment(type, id);
+        return choirManagementBusinessService.getAppointment(id);
     }
 
     /**
-     * Updates a rehearsal
+     * Updates or creates an appointment
      *
-     * @param rehearsal Rehearsal object
-     * @return an updated rehearsal.
-     */
-    @PostMapping(value = "/rehearsal/save")
-    @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ADMIN')")
-    public Rehearsal updateRehearsal(
-            @RequestBody Rehearsal rehearsal
-    ) {
-        return choirManagementBusinessService.saveRehearsal(rehearsal);
-    }
-
-    /**
-     * Updates a performance
-     *
-     * @param performance Performance object
-     * @return an updated performance.
-     */
-    @PostMapping(value = "/performance/save")
-    @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("hasRole('ADMIN')")
-    public Performance updatePerformance(
-            @RequestBody Performance performance
-    ) {
-        return choirManagementBusinessService.savePerformance(performance);
-    }
-
-    /**
-     * Saves an updated attendance.
-     *
-     * @param appointmentAttendanceDto the updated attendance informations.
-     * @return the updated attendance.
+     * @param appointment Rehearsal object
+     * @return a new or an updated appointment.
      */
     @PostMapping(value = "/save")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
+    public Appointment saveAppointment(
+            @RequestBody Appointment appointment
+    ) {
+        return choirManagementBusinessService.saveAppointment(appointment);
+    }
+
+
+    /**
+     * Saves an attendance; create a new one if already existed
+     *
+     * @param appointmentAttendanceDto the new attendance or updated attendance information.
+     * @return the new or updated attendance.
+     */
+    @PostMapping(value = "/attendance/save")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("isAuthenticated()")
     public AppointmentAttendanceDto saveAttendance(
             @RequestBody AppointmentAttendanceRequestDto appointmentAttendanceDto
     ) {
-        return choirManagementBusinessService.updateAppointment(appointmentAttendanceDto);
+        return choirManagementBusinessService.updateAttendance(appointmentAttendanceDto);
     }
 }

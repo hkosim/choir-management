@@ -1,18 +1,22 @@
 package com.hk.personal.choir_management.business.service.impl;
 
 import com.hk.personal.choir_management.business.service.ChoirManagementBusinessService;
-import com.hk.personal.choir_management.dto.AppointmentView;
-import com.hk.personal.choir_management.dto.appointment.AppointmentAttendanceDto;
-import com.hk.personal.choir_management.dto.appointment.AppointmentAttendanceRequestDto;
-import com.hk.personal.choir_management.dto.attendance.MemberAttendanceDto;
-import com.hk.personal.choir_management.dto.member.*;
-import com.hk.personal.choir_management.entity.*;
+import com.hk.personal.choir_management.model.dto.AppointmentView;
+import com.hk.personal.choir_management.model.dto.appointment.AppointmentAttendanceDto;
+import com.hk.personal.choir_management.model.dto.appointment.AppointmentAttendanceRequestDto;
+import com.hk.personal.choir_management.model.dto.attendance.MemberAttendanceDto;
+import com.hk.personal.choir_management.model.dto.member.*;
+import com.hk.personal.choir_management.model.entity.*;
+import com.hk.personal.choir_management.model.enums.AppointmentType;
 import com.hk.personal.choir_management.service.AppointmentService;
 import com.hk.personal.choir_management.service.AttendanceService;
 import com.hk.personal.choir_management.service.MemberService;
 import com.hk.personal.choir_management.service.SongService;
+import org.apache.commons.lang3.EnumUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -97,36 +101,41 @@ public class ChoirManagementBusinessServiceImpl implements ChoirManagementBusine
     }
 
     @Override
-    public Page<AppointmentAttendanceDto> getAppointments(String username, Pageable pageable) {
+    public Page<AppointmentAttendanceDto> getMemberAttendances(String username, Pageable pageable) {
+        Pageable sortedPageable = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by("appointment.date").ascending()
+        );
         return appointmentService.findAppointmentsByUsernameAndDate(
                 username,
                 LocalDate.now(),
-                pageable
+                sortedPageable
         );
     }
 
     @Override
-    public AppointmentView getAppointment(String type, Long id) {
-        return this.appointmentService.findAppointmentByType(type, id);
+    public Appointment getAppointment(Long id) {
+        return appointmentService.findAppointmentById(id);
     }
 
     @Override
-    public AppointmentAttendanceDto updateAppointment(AppointmentAttendanceRequestDto appointmentAttendanceRequestDto) {
+    public Appointment saveAppointment(Appointment appointment) {
+        if (appointment.getId() == 0L) {
+            appointment.setId(null);
+            return appointmentService.addAppointment(appointment);
+
+        }
+        return appointmentService.saveAppointment(appointment);
+    }
+
+    @Override
+    public AppointmentAttendanceDto updateAttendance(AppointmentAttendanceRequestDto appointmentAttendanceRequestDto) {
         return appointmentService.saveAttendance(
                 appointmentAttendanceRequestDto.username(),
                 appointmentAttendanceRequestDto.id(),
-                appointmentAttendanceRequestDto.type(),
-                appointmentAttendanceRequestDto.present()
+                appointmentAttendanceRequestDto.attendanceStatus()
         );
     }
 
-    @Override
-    public Rehearsal saveRehearsal(Rehearsal rehearsal) {
-        return appointmentService.saveRehearsal(rehearsal);
-    }
-
-    @Override
-    public Performance savePerformance(Performance performance) {
-        return appointmentService.savePerformance(performance);
-    }
 }

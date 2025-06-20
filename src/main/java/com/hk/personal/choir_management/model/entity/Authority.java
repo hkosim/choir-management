@@ -1,6 +1,6 @@
-package com.hk.personal.choir_management.entity;
+package com.hk.personal.choir_management.model.entity;
 
-import com.hk.personal.choir_management.entity.composite.AuthorityId;
+import com.hk.personal.choir_management.model.entity.composite.AuthorityId;
 import jakarta.persistence.*;
 
 @Entity
