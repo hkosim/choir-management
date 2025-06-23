@@ -13,16 +13,28 @@
         <mat-icon>open_in_new</mat-icon>
       </button>
       <!-- Only show button if admin logged in -->
-      @if (userRole === 'admin') {<button
+      @if (userRole === UserRole.ADMIN) {
+      <button
         mat-icon-button
         aria-label="Code"
         (click)="navigateTo('edit', appointment().id)"
       >
         <mat-icon>edit</mat-icon>
       </button>
-      <button mat-icon-button aria-label="Open">
+      @if (appointment().deletedAt) {
+      <button
+        mat-icon-button
+        aria-label="Open"
+        (click)="restoreAppointment(appointment().id)"
+      >
+        <mat-icon>restore</mat-icon></button
+      >} @else {<button
+        mat-icon-button
+        aria-label="Open"
+        (click)="removeAppointment(appointment().id)"
+      >
         <mat-icon>delete</mat-icon></button
-      >}
+      >} }
     </div>
   </div>
 
@@ -40,14 +52,16 @@
         </mat-icon>
         }
       </span>
-      <span class="pb-2"> {{appointment().title}} </span>
+      <span class="pb-2">
+        {{ appointment().deletedAt? '(CANCELLED)':'' }} {{appointment().title}}
+      </span>
     </mat-card-title>
 
-    <mat-card-subtitle class="mt-2">
+    <mat-card-subtitle class="mt-2 mb-2">
       {{appointment().description}}
     </mat-card-subtitle>
   </mat-card-header>
-
+  @if (!appointment().deletedAt) {
   <mat-card-actions align="end">
     <mat-button-toggle-group
       [(ngModel)]="attendance"
@@ -66,4 +80,5 @@
       </mat-button-toggle>
     </mat-button-toggle-group>
   </mat-card-actions>
+  }
 </mat-card>

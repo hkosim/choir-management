@@ -1,7 +1,7 @@
 <div class="container-fluid">
-  <!-- TODO: APPOINTMENT CARDS -->
   <h2 class="mb-3">Appointments</h2>
   <!-- Paginator (up) -->
+  @if (userRole === UserRole.ADMIN) {
   <mat-toolbar>
     <mat-toolbar-row>
       <button mat-raised-button (click)="navigateTo('add')">
@@ -18,9 +18,11 @@
       </mat-paginator>
     </mat-toolbar-row>
   </mat-toolbar>
+  }
 
   <!-- Appointments -->
-  @for (appointmentAttendance of appointmentAttendancePage().content; track $index) {
+  @for (appointmentAttendance of appointmentAttendancePage().content; track
+  $index) {
   <app-appointment
     [appointmentAttendance]="appointmentAttendance.attendanceStatus"
     [appointment]="appointmentAttendance.appointment"

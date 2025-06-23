@@ -124,9 +124,18 @@ public class ChoirManagementBusinessServiceImpl implements ChoirManagementBusine
         if (appointment.getId() == 0L) {
             appointment.setId(null);
             return appointmentService.addAppointment(appointment);
-
         }
         return appointmentService.saveAppointment(appointment);
+    }
+
+    @Override
+    public Appointment deleteAppointment(Long id) {
+        return appointmentService.deleteAppointment(id);
+    }
+
+    @Override
+    public Appointment restoreAppointment(Long id) {
+        return appointmentService.restoreAppointment(id);
     }
 
     @Override

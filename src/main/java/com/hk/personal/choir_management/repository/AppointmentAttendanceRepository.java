@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +21,12 @@ public interface AppointmentAttendanceRepository extends JpaRepository<Appointme
     Page<AppointmentAttendance> findByMemberUsernameAndAppointmentDateAfter(
             String username,
             LocalDate date,
-            Pageable pageable);
+            Pageable pageable
+    );
+
+    Page<AppointmentAttendance> findByMemberUsernameAndAppointmentDateAfterAndAppointmentDeletedAtIsNull(
+            String username, LocalDate date, Pageable pageable
+    );
 
     Optional<AppointmentAttendance> findByMemberAndAppointment(Member member, Appointment appointment);
 }

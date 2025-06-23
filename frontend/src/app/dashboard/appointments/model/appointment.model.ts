@@ -15,5 +15,5 @@ export interface Appointment {
   createdAt: string;
   lastModifiedBy: string;
   lastModifiedAt: string;
-  deletedAt: string;
+  deletedAt: string | null;
 }

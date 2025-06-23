@@ -8,9 +8,13 @@ import com.hk.personal.choir_management.service.AppointmentService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -38,11 +42,29 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public Page<AppointmentAttendanceDto> findAppointmentsByUsernameAndDate(String username, LocalDate date, Pageable pageable) {
         LocalDate today = LocalDate.now();
+        // Returns all the deleted items if logged in is admin
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // Fetch all future appointments with attendance
-        Page<AppointmentAttendance> appointmentAttendances = appointmentAttendanceRepository.findByMemberUsernameAndAppointmentDateAfter(
-                username, today.minusDays(1), pageable
-        );
+
+        Page<AppointmentAttendance> appointmentAttendances = appointmentAttendanceRepository.
+                findByMemberUsernameAndAppointmentDateAfter(
+                        username, today.minusDays(1), pageable
+                );
+//        boolean isAdmin = authentication.getAuthorities().stream()
+//                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+//        if (isAdmin) {
+//            // Admin sees everything (including soft-deleted appointments)
+//            appointmentAttendances = appointmentAttendanceRepository.
+//                    findByMemberUsernameAndAppointmentDateAfter(
+//                            username, today.minusDays(1), pageable
+//                    );
+//        } else {
+//            // Regular users only see appointments that are NOT soft-deleted
+//            appointmentAttendances = appointmentAttendanceRepository.findByMemberUsernameAndAppointmentDateAfterAndAppointmentDeletedAtIsNull(
+//                    username, today.minusDays(1), pageable
+//            );
+//        }
+
         return appointmentAttendances.map(appointmentAttendance ->
                 new AppointmentAttendanceDto(
                         appointmentAttendance.getAppointment(),
@@ -104,6 +126,43 @@ public class AppointmentServiceImpl implements AppointmentService {
         _appointment.setTime(appointment.getTime());
         _appointment.setLocation(appointment.getLocation());
         _appointment.setAppointmentType(appointment.getAppointmentType());
+
+        return appointmentRepository.save(_appointment);
+    }
+
+
+    /**
+     * Performs a soft-delete.
+     *
+     * @param id of appointment that will be deleted.
+     * @return deleted object.
+     */
+    @Override
+    public Appointment deleteAppointment(Long id) {
+        Appointment _appointment = appointmentRepository.
+                findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Appointment not found:" + id));
+
+        // Save the details
+        _appointment.setDeletedAt(LocalDateTime.now());
+
+        return appointmentRepository.save(_appointment);
+    }
+
+    /**
+     * Performs restores an appointment.
+     *
+     * @param id of appointment that was deleted.
+     * @return restored appointment.
+     */
+    @Override
+    public Appointment restoreAppointment(Long id) {
+        Appointment _appointment = appointmentRepository.
+                findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Appointment not found:" + id));
+
+        // Save the details
+        _appointment.setDeletedAt(null);
 
         return appointmentRepository.save(_appointment);
     }

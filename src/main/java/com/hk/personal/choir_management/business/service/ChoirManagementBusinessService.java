@@ -30,6 +30,8 @@ public interface ChoirManagementBusinessService {
     Page<AppointmentAttendanceDto> getMemberAttendances(String username, Pageable pageable);
     Appointment getAppointment(Long id);
     Appointment saveAppointment(Appointment appointment);
+    Appointment deleteAppointment(Long id);
+    Appointment restoreAppointment(Long id);
     AppointmentAttendanceDto updateAttendance(AppointmentAttendanceRequestDto appointmentAttendanceRequestDto);
 
 
