@@ -66,9 +66,9 @@ export class AppointmentService {
       id: updatedAttendance.appointment.id,
       attendanceStatus: updatedAttendance.attendanceStatus,
     };
-    console.log(attendanceUpdateRequest);
+
     return this.httpClient
-      .post<Appointment>(
+      .put<Appointment>(
         this.apiUrl + '/attendance/save',
         attendanceUpdateRequest,
         {
@@ -116,13 +116,43 @@ export class AppointmentService {
 
     const url = `${this.apiUrl}/save`;
 
-    return this.httpClient
-      .post<Appointment>(url, appointment, { headers })
-      .pipe(
-        tap((appointment: Appointment) => {
-          console.log(appointment);
-        }),
-        catchError((error: HttpErrorResponse) => throwError(() => error.error))
-      );
+    return this.httpClient.put<Appointment>(url, appointment, { headers }).pipe(
+      tap((appointment: Appointment) => {}),
+      catchError((error: HttpErrorResponse) => throwError(() => error.error))
+    );
+  }
+
+  /**
+   * Performs a soft delete on appointment.
+   * @params id the updated appointment.
+   * @returns An observable of the deleted appointment.
+   */
+  public deleteAppointment(id: number): Observable<Appointment> {
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', 'Basic ' + token!);
+
+    const url = `${this.apiUrl}/delete/${id}`;
+
+    return this.httpClient.delete<Appointment>(url, { headers }).pipe(
+      tap((appointment: Appointment) => {}),
+      catchError((error: HttpErrorResponse) => throwError(() => error.error))
+    );
+  }
+
+  /**
+   * Restore the deleted appointment.
+   * @params id the deleted appointment.
+   * @returns An observable of the restored appointment.
+   */
+  public restoreAppointment(id: number): Observable<Appointment> {
+    const token = sessionStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', 'Basic ' + token!);
+
+    const url = `${this.apiUrl}/restore/${id}`;
+
+    return this.httpClient.put<Appointment>(url, {}, { headers }).pipe(
+      tap((appointment: Appointment) => {}),
+      catchError((error: HttpErrorResponse) => throwError(() => error.error))
+    );
   }
 }

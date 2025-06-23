@@ -101,7 +101,7 @@ export class AddAppointment {
       lastModifiedAt: '',
       deletedAt: '',
     };
-    console.log(newAppointment);
+
     const subscription = this.appointmentService
       .saveAppointment(newAppointment)
       .subscribe({

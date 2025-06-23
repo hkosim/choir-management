@@ -19,6 +19,8 @@ public interface AppointmentService {
 
     Appointment addAppointment(Appointment appointment);
     Appointment saveAppointment(Appointment appointment);
+    Appointment restoreAppointment(Long id);
+    Appointment deleteAppointment(Long id);
 
     AppointmentAttendanceDto saveAttendance(String username, Long id, AttendanceStatus attendanceStatus);
 }

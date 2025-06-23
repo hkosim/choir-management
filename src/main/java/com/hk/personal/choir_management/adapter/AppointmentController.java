@@ -21,22 +21,6 @@ public class AppointmentController {
         this.choirManagementBusinessService = choirManagementBusinessService;
     }
 
-    /**
-     * Returns all appointments with attendance status for a given user.
-     *
-     * @param pageable the returned page settings
-     * @param username the user's username
-     * @return the attendances of the members
-     */
-    @GetMapping(value = "/attendances")
-    @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize("isAuthenticated()")
-    public Page<AppointmentAttendanceDto> getMemberAttendances(
-            @PageableDefault(sort = "id") Pageable pageable,
-            @RequestParam(value = "username") String username
-    ) {
-        return choirManagementBusinessService.getMemberAttendances(username, pageable);
-    }
 
     /**
      * Returns an appointment given the id of the appointment.
@@ -59,13 +43,61 @@ public class AppointmentController {
      * @param appointment Rehearsal object
      * @return a new or an updated appointment.
      */
-    @PostMapping(value = "/save")
+    @PutMapping(value = "/save")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasRole('ADMIN')")
     public Appointment saveAppointment(
             @RequestBody Appointment appointment
     ) {
         return choirManagementBusinessService.saveAppointment(appointment);
+    }
+
+    /**
+     * Performs a soft-delete on an appointment.
+     *
+     * @param id of the appointment.
+     * @return deleted appointment.
+     */
+    @DeleteMapping(value = "/delete/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
+    public Appointment deleteAppointment(
+            @PathVariable Long id
+    ) {
+        return choirManagementBusinessService.deleteAppointment(id);
+    }
+
+    /**
+     * Restore a deleted appointment.
+     *
+     * @param id of the appointment.
+     * @return restored appointment.
+     */
+    @PutMapping(value = "/restore/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
+    public Appointment restoreAppointment(
+            @PathVariable Long id
+    ) {
+        return choirManagementBusinessService.restoreAppointment(id);
+    }
+
+
+    /**
+     * Returns all appointments with attendance status for a given user.
+     *
+     * @param pageable the returned page settings
+     * @param username the user's username
+     * @return the attendances of the members
+     */
+    @GetMapping(value = "/attendances")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("isAuthenticated()")
+    public Page<AppointmentAttendanceDto> getMemberAttendances(
+            @PageableDefault(sort = "id") Pageable pageable,
+            @RequestParam(value = "username") String username
+    ) {
+        return choirManagementBusinessService.getMemberAttendances(username, pageable);
     }
 
 
@@ -75,7 +107,7 @@ public class AppointmentController {
      * @param appointmentAttendanceDto the new attendance or updated attendance information.
      * @return the new or updated attendance.
      */
-    @PostMapping(value = "/attendance/save")
+    @PutMapping(value = "/attendance/save")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("isAuthenticated()")
     public AppointmentAttendanceDto saveAttendance(

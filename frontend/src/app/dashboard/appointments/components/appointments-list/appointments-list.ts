@@ -9,6 +9,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { AuthService } from '../../../../auth/auth.service';
+import { UserRole } from '../../../../auth/enums/user-role.enum';
 
 @Component({
   selector: 'app-appointments-list',
@@ -24,13 +26,21 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class AppointmentsList implements OnInit {
   private appointmentService = inject(AppointmentService);
+  private authService = inject(AuthService);
   private destroyRef = inject(DestroyRef);
   private snackBar = inject(MatSnackBar);
   private router = inject(Router);
 
   appointmentAttendancePage = input.required<AppointmentAttendancePage>();
+  UserRole = UserRole;
+  userRole: UserRole = UserRole.USER;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const role: String[] = this.authService.roles;
+    if (role.includes('ROLE_ADMIN')) {
+      this.userRole = UserRole.ADMIN;
+    }
+  }
 
   onChangePage() {
     this.snackBar.open('Page change', 'close', {
@@ -61,9 +71,5 @@ export class AppointmentsList implements OnInit {
   // Navigation
   navigateTo(route: string) {
     this.router.navigate(['dashboard', 'appointments', route]);
-  }
-
-  submit() {
-    console.log('submit');
   }
 }
